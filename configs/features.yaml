@@ -1,0 +1,17 @@
+schema_version: "1.0"
+features:
+  - {name: account_tenure_days, type: float, entity: customer, cutoff_rule: "created_at < decision_time", maturity_rule: none, default: 0.0, explanation: Account tenure before request}
+  - {name: prior_order_count, type: float, entity: customer, cutoff_rule: "ordered_at < decision_time", maturity_rule: none, default: 0.0, explanation: Prior customer orders}
+  - {name: prior_refund_count_30d, type: float, entity: customer, cutoff_rule: "requested_at < decision_time", maturity_rule: none, default: 0.0, explanation: Prior requests in 30 days}
+  - {name: prior_refund_count_90d, type: float, entity: customer, cutoff_rule: "requested_at < decision_time", maturity_rule: none, default: 0.0, explanation: Prior requests in 90 days}
+  - {name: prior_matured_adverse_outcome_count, type: float, entity: customer, cutoff_rule: "requested_at < decision_time", maturity_rule: "outcome_available_at < decision_time", default: 0.0, explanation: Prior matured simulated adverse outcomes}
+  - {name: prior_returnless_count, type: float, entity: customer, cutoff_rule: "requested_at < decision_time", maturity_rule: none, default: 0.0, explanation: Prior returnless requests}
+  - {name: hours_delivery_to_request, type: float, entity: request, cutoff_rule: current_request, maturity_rule: none, default: 0.0, explanation: Delay after delivery}
+  - {name: requested_amount_paise, type: float, entity: request, cutoff_rule: current_request, maturity_rule: none, default: 0.0, explanation: Current requested amount}
+  - {name: amount_paid_ratio, type: float, entity: request, cutoff_rule: current_request, maturity_rule: none, default: 0.0, explanation: Requested amount divided by paid amount}
+  - {name: requested_quantity_ratio, type: float, entity: request, cutoff_rule: current_request, maturity_rule: none, default: 0.0, explanation: Requested quantity divided by item count}
+  - {name: returnless_requested, type: float, entity: request, cutoff_rule: current_request, maturity_rule: none, default: 0.0, explanation: Returnless request indicator}
+  - {name: evidence_provided, type: float, entity: request, cutoff_rule: current_request, maturity_rule: none, default: 0.0, explanation: Evidence present at request time}
+  - {name: first_order_indicator, type: float, entity: customer, cutoff_rule: "ordered_at < decision_time", maturity_rule: none, default: 1.0, explanation: No earlier customer order}
+  - {name: reason_code, type: category, entity: request, cutoff_rule: current_request, maturity_rule: none, default: other, explanation: Current refund reason}
+  - {name: category, type: category, entity: order, cutoff_rule: current_order, maturity_rule: none, default: other, explanation: Product category}

@@ -1,0 +1,19 @@
+schema_version: "1.0"
+seed: 20260831
+source_mode: fixture
+uci_archive: null
+uci_gbp_to_inr: 100.0
+n_orders: 40000
+n_refund_requests: 8000
+abuse_prevalence: 0.09
+hard_legitimate_fraction: 0.18
+start_at: "2024-01-01T00:00:00Z"
+duration_days: 730
+outcome_delay_days: 14
+split_ratios:
+  train: 0.60
+  calibration: 0.10
+  policy_selection: 0.10
+  final_test: 0.20
+cold_start_fraction: 0.08
+output_dir: artifacts/data

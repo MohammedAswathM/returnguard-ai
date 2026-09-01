@@ -1,0 +1,8 @@
+schema_version: "1.0"
+label_column: is_refund_abuse_simulated
+threshold: 0.50
+random_seed: 20260831
+max_iter: 1000
+class_weight: balanced
+output_dir: artifacts/baselines
+
