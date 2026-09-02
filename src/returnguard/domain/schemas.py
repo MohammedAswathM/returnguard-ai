@@ -7,8 +7,10 @@ from returnguard.domain.enums import (
     AccountStatus,
     ActorType,
     DecisionStage,
+    PaymentIntegrityCode,
     PaymentStatus,
     RecommendedAction,
+    RefundLedgerStatus,
     RefundReason,
     RequestChannel,
     VerificationResult,
@@ -69,6 +71,70 @@ class Payment(Contract):
     def validate_time(self) -> "Payment":
         if self.paid_at is not None:
             require_utc(self.paid_at)
+        return self
+
+
+class PaymentSnapshot(Contract):
+    merchant_id: str = Field(min_length=1)
+    payment_id: str = Field(min_length=1)
+    razorpay_payment_id: str | None = None
+    order_id: str = Field(min_length=1)
+    currency: str = Field(pattern=r"^[A-Z]{3}$")
+    captured_amount_paise: int = Field(ge=0)
+    amount_refunded_paise: int = Field(ge=0)
+    refundable_balance_paise: int = Field(ge=0)
+    payment_status: PaymentStatus
+    captured_at: datetime | None = None
+    snapshot_as_of: datetime
+    source: str = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_balance_and_times(self) -> "PaymentSnapshot":
+        require_utc(self.snapshot_as_of)
+        if self.captured_at is not None:
+            require_utc(self.captured_at)
+            if self.captured_at > self.snapshot_as_of:
+                raise ValueError("captured_at cannot follow snapshot_as_of")
+        expected = self.captured_amount_paise - self.amount_refunded_paise
+        if expected < 0 or self.refundable_balance_paise != expected:
+            raise ValueError("refundable balance must equal captured amount minus refunded amount")
+        return self
+
+
+class RefundLedgerEntry(Contract):
+    refund_id: str = Field(min_length=1)
+    payment_id: str = Field(min_length=1)
+    merchant_id: str = Field(min_length=1)
+    amount_paise: int = Field(gt=0)
+    currency: str = Field(pattern=r"^[A-Z]{3}$")
+    status: RefundLedgerStatus
+    created_at: datetime
+    processed_at: datetime | None = None
+    idempotency_key: str = Field(min_length=1)
+    razorpay_refund_id: str | None = None
+
+    @model_validator(mode="after")
+    def validate_ledger_times(self) -> "RefundLedgerEntry":
+        require_utc(self.created_at)
+        if self.processed_at is not None:
+            require_utc(self.processed_at)
+            if self.processed_at < self.created_at:
+                raise ValueError("processed_at cannot precede created_at")
+        return self
+
+
+class PaymentIntegrityDecision(Contract):
+    eligible_for_risk_scoring: bool
+    reason_code: PaymentIntegrityCode | None = None
+    refundable_balance_paise: int | None = Field(default=None, ge=0)
+    snapshot_as_of: datetime | None = None
+
+    @model_validator(mode="after")
+    def validate_decision(self) -> "PaymentIntegrityDecision":
+        if self.snapshot_as_of is not None:
+            require_utc(self.snapshot_as_of)
+        if self.eligible_for_risk_scoring == (self.reason_code is not None):
+            raise ValueError("eligible decisions have no failure reason; ineligible decisions require one")
         return self
 
 

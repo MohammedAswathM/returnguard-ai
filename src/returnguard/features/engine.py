@@ -13,19 +13,42 @@ from returnguard.features.registry import FeatureSpec
 
 
 def build_point_in_time_features(
-    data_dir: Path, registry: tuple[FeatureSpec, ...]
+    data_dir: Path, registry: tuple[FeatureSpec, ...],
+    partitions: frozenset[str] = frozenset({"train", "calibration", "policy_selection"}),
+    final_access_grant: str | None = None,
 ) -> pd.DataFrame:
     customers = pd.read_csv(data_dir / "customers.csv", parse_dates=["created_at"])
     orders = pd.read_csv(data_dir / "orders.csv", parse_dates=["ordered_at", "delivered_at"])
-    requests = pd.read_csv(
-        data_dir / "refund_requests.csv", parse_dates=["requested_at", "outcome_available_at"]
-    ).sort_values(["requested_at", "refund_request_id"])
+    requests = pd.read_csv(data_dir / "refund_requests.csv")
+    for column in ("requested_at", "outcome_available_at"):
+        requests[column] = pd.to_datetime(requests[column], utc=True, format="mixed")
+    allowed = {"train", "calibration", "policy_selection"}
+    if final_access_grant == "FROZEN_FINAL_EVALUATION":
+        allowed.add("final_test")
+    forbidden = partitions - allowed
+    if forbidden:
+        raise ValueError(f"sealed partitions cannot enter development feature replay: {sorted(forbidden)}")
+    requests = requests.loc[requests["partition"].isin(partitions)].sort_values(
+        ["requested_at", "refund_request_id"]
+    )
     customer_created = customers.set_index("customer_id")["created_at"].to_dict()
     order_by_id = orders.set_index("order_id").to_dict(orient="index")
     order_times_by_customer: dict[str, list[pd.Timestamp]] = defaultdict(list)
     for row in orders.sort_values("ordered_at").to_dict(orient="records"):
         typed_row = cast(dict[str, Any], row)
         order_times_by_customer[str(typed_row["customer_id"])].append(typed_row["ordered_at"])
+    cancellation_times: dict[str, list[pd.Timestamp]] = defaultdict(list)
+    transaction_path = data_dir / "transaction_events.csv"
+    if transaction_path.exists():
+        transaction_events = pd.read_csv(transaction_path)
+        if not transaction_events.empty:
+            transaction_events["event_time"] = pd.to_datetime(
+                transaction_events["event_time"], utc=True
+            )
+            for raw_event in transaction_events.sort_values("event_time").to_dict(orient="records"):
+                event = cast(dict[str, Any], raw_event)
+                if event["event_type"] == "cancellation":
+                    cancellation_times[str(event["customer_id"])].append(event["event_time"])
     request_times: dict[str, list[pd.Timestamp]] = defaultdict(list)
     prior_returnless: dict[str, int] = defaultdict(int)
     outcome_heaps: dict[str, list[tuple[pd.Timestamp, bool]]] = defaultdict(list)
@@ -55,6 +78,9 @@ def build_point_in_time_features(
             "prior_refund_count_90d": float(prior_90_count),
             "prior_matured_adverse_outcome_count": float(matured_adverse[customer_id]),
             "prior_returnless_count": float(prior_returnless[customer_id]),
+            "prior_cancellation_count": float(
+                bisect_left(cancellation_times[customer_id], now)
+            ),
             "hours_delivery_to_request": max(0.0, (now - order["delivered_at"]).total_seconds() / 3600),
             "requested_amount_paise": float(request["requested_amount_paise"]),
             "amount_paid_ratio": float(request["requested_amount_paise"]) / paid,
@@ -80,3 +106,13 @@ def build_point_in_time_features(
             (request["outcome_available_at"], bool(request["is_refund_abuse_simulated"])),
         )
     return pd.DataFrame(rows)
+
+
+def build_serving_feature(
+    data_dir: Path, registry: tuple[FeatureSpec, ...], refund_request_id: str,
+) -> pd.Series:
+    replay = build_point_in_time_features(data_dir, registry)
+    matches = replay.loc[replay["refund_request_id"] == refund_request_id]
+    if len(matches) != 1:
+        raise KeyError(f"development request not found exactly once: {refund_request_id}")
+    return matches.iloc[0]

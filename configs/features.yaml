@@ -6,6 +6,7 @@ features:
   - {name: prior_refund_count_90d, type: float, entity: customer, cutoff_rule: "requested_at < decision_time", maturity_rule: none, default: 0.0, explanation: Prior requests in 90 days}
   - {name: prior_matured_adverse_outcome_count, type: float, entity: customer, cutoff_rule: "requested_at < decision_time", maturity_rule: "outcome_available_at < decision_time", default: 0.0, explanation: Prior matured simulated adverse outcomes}
   - {name: prior_returnless_count, type: float, entity: customer, cutoff_rule: "requested_at < decision_time", maturity_rule: none, default: 0.0, explanation: Prior returnless requests}
+  - {name: prior_cancellation_count, type: float, entity: customer, cutoff_rule: "event_time < decision_time", maturity_rule: none, default: 0.0, explanation: Prior UCI cancellation transaction events; never an abuse label}
   - {name: hours_delivery_to_request, type: float, entity: request, cutoff_rule: current_request, maturity_rule: none, default: 0.0, explanation: Delay after delivery}
   - {name: requested_amount_paise, type: float, entity: request, cutoff_rule: current_request, maturity_rule: none, default: 0.0, explanation: Current requested amount}
   - {name: amount_paid_ratio, type: float, entity: request, cutoff_rule: current_request, maturity_rule: none, default: 0.0, explanation: Requested amount divided by paid amount}

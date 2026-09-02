@@ -1,0 +1,13 @@
+schema_version: "1.0"
+model_version: returnguard-lgbm-2026-09-01.1
+label_column: is_refund_abuse_simulated
+random_seed: 20260831
+n_estimators: 240
+learning_rate: 0.04
+num_leaves: 15
+min_child_samples: 40
+subsample: 0.9
+colsample_bytree: 0.9
+calibration_bins: 10
+isotonic_min_support: 400
+output_dir: artifacts/training_run

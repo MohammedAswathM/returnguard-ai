@@ -1,0 +1,16 @@
+schema_version: "1.0"
+policy_version: returnguard-policy-2026-09-01.1
+additional_loss_rate: 0.35
+salvage_rate: 0.45
+verification_cost_paise: 2500
+review_cost_paise: 6000
+legitimate_verification_friction_paise: 4500
+legitimate_review_friction_paise: 12000
+legitimate_delay_cost_paise: 2500
+reverse_logistics_cost_paise: 9000
+max_manual_review_rate: 0.05
+max_legitimate_delay_rate: 0.20
+laplace_alpha: 1.0
+inconclusive_lr_min: 0.8
+inconclusive_lr_max: 1.25
+output_dir: artifacts/frozen_policy

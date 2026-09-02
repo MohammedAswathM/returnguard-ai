@@ -56,6 +56,41 @@ class BaselineConfig(StrictModel):
     output_dir: Path
 
 
+class ModelConfig(StrictModel):
+    schema_version: str
+    model_version: str
+    label_column: str
+    random_seed: int
+    n_estimators: int = Field(gt=0)
+    learning_rate: float = Field(gt=0, lt=1)
+    num_leaves: int = Field(gt=1)
+    min_child_samples: int = Field(gt=0)
+    subsample: float = Field(gt=0, le=1)
+    colsample_bytree: float = Field(gt=0, le=1)
+    calibration_bins: int = Field(ge=2)
+    isotonic_min_support: int = Field(ge=100)
+    output_dir: Path
+
+
+class PolicyConfig(StrictModel):
+    schema_version: str
+    policy_version: str
+    additional_loss_rate: float = Field(ge=0)
+    salvage_rate: float = Field(ge=0, le=1)
+    verification_cost_paise: int = Field(ge=0)
+    review_cost_paise: int = Field(ge=0)
+    legitimate_verification_friction_paise: int = Field(ge=0)
+    legitimate_review_friction_paise: int = Field(ge=0)
+    legitimate_delay_cost_paise: int = Field(ge=0)
+    reverse_logistics_cost_paise: int = Field(ge=0)
+    max_manual_review_rate: float = Field(gt=0, le=0.05)
+    max_legitimate_delay_rate: float = Field(gt=0, lt=1)
+    laplace_alpha: float = Field(gt=0)
+    inconclusive_lr_min: float = Field(gt=0)
+    inconclusive_lr_max: float = Field(gt=0)
+    output_dir: Path
+
+
 def load_yaml(path: Path) -> dict[str, Any]:
     with path.open(encoding="utf-8") as handle:
         raw = yaml.safe_load(handle)
@@ -70,3 +105,11 @@ def load_data_config(path: Path) -> DataConfig:
 
 def load_baseline_config(path: Path) -> BaselineConfig:
     return BaselineConfig.model_validate(load_yaml(path))
+
+
+def load_model_config(path: Path) -> ModelConfig:
+    return ModelConfig.model_validate(load_yaml(path))
+
+
+def load_policy_config(path: Path) -> PolicyConfig:
+    return PolicyConfig.model_validate(load_yaml(path))

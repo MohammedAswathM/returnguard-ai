@@ -2,8 +2,10 @@ from returnguard.domain.enums import (
     AccountStatus,
     ActorType,
     DecisionStage,
+    PaymentIntegrityCode,
     PaymentStatus,
     RecommendedAction,
+    RefundLedgerStatus,
     RefundReason,
     RequestChannel,
     VerificationResult,
@@ -15,6 +17,9 @@ from returnguard.domain.schemas import (
     Customer,
     Order,
     Payment,
+    PaymentIntegrityDecision,
+    PaymentSnapshot,
+    RefundLedgerEntry,
     RefundRequest,
     RiskDecision,
     VerificationEvent,
@@ -22,8 +27,8 @@ from returnguard.domain.schemas import (
 
 __all__ = [
     "AccountStatus", "ActorType", "AuditEvent", "Customer", "DecisionStage", "Order",
-    "Payment", "PaymentStatus", "RecommendedAction", "RefundReason", "RefundRequest",
+    "Payment", "PaymentIntegrityCode", "PaymentIntegrityDecision", "PaymentSnapshot",
+    "PaymentStatus", "RecommendedAction", "RefundLedgerEntry", "RefundLedgerStatus", "RefundReason", "RefundRequest",
     "RequestChannel", "RiskDecision", "VerificationEvent", "VerificationResult",
     "VerificationType", "WorkflowState",
 ]
-

@@ -1,0 +1,72 @@
+{
+  "cold_start_challenge": {
+    "average_precision": 0.7916316526610645,
+    "average_probability": 0.08500491828478413,
+    "positive_support": 17,
+    "prevalence": 0.1328125,
+    "support": 128,
+    "underpowered": false
+  },
+  "hard_legitimate_scenarios": {
+    "carrier_incident": {
+      "average_precision": null,
+      "average_probability": 0.01084918923297906,
+      "positive_support": 0,
+      "prevalence": 0.0,
+      "support": 29,
+      "underpowered": true
+    },
+    "first_order_return": {
+      "average_precision": null,
+      "average_probability": 0.00714128954248366,
+      "positive_support": 0,
+      "prevalence": 0.0,
+      "support": 30,
+      "underpowered": true
+    },
+    "legitimate_high_value_damage": {
+      "average_precision": null,
+      "average_probability": 0.023488911629167806,
+      "positive_support": 0,
+      "prevalence": 0.0,
+      "support": 31,
+      "underpowered": true
+    },
+    "loyal_high_volume": {
+      "average_precision": null,
+      "average_probability": 0.08375728228356898,
+      "positive_support": 0,
+      "prevalence": 0.0,
+      "support": 31,
+      "underpowered": true
+    },
+    "missing_evidence_inconclusive": {
+      "average_precision": null,
+      "average_probability": 0.043817881720430094,
+      "positive_support": 0,
+      "prevalence": 0.0,
+      "support": 31,
+      "underpowered": true
+    },
+    "product_defect_burst": {
+      "average_precision": null,
+      "average_probability": 0.007848762159073265,
+      "positive_support": 0,
+      "prevalence": 0.0,
+      "support": 32,
+      "underpowered": true
+    },
+    "shared_household": {
+      "average_precision": null,
+      "average_probability": 0.047486627731092426,
+      "positive_support": 0,
+      "prevalence": 0.0,
+      "support": 30,
+      "underpowered": true
+    }
+  },
+  "schema_version": "1.0",
+  "slice_results_sha256": "4d40961b95169dac3761a0641fb491629a3805f542f16b2ca9b43da04203af98",
+  "source_case_results_sha256": "20f3e7450f10e073607326b17fd48265f3e685f7a59bdb76f82d3f5b5364dcf2",
+  "timing_disclosure": "Slice labels were summarized only after the frozen one-shot final evaluation; they were not used for fitting or policy selection."
+}

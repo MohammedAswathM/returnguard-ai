@@ -22,10 +22,13 @@ def test_uci_foundation_preserves_cancellations_as_non_label_events(tmp_path: Pa
     archive = tmp_path / "online_retail_ii.zip"
     with ZipFile(archive, "w", ZIP_DEFLATED) as bundle:
         bundle.write(workbook, workbook.name)
-    customers, orders, payments, notes = build_uci_foundation(archive, 100, 7, 100.0)
+    customers, orders, payments, order_items, events, notes = build_uci_foundation(
+        archive, 100, 7, 100.0
+    )
     assert len(orders) == len(payments) == 100
     assert len(customers) > 0
+    assert len(order_items) >= 100
+    assert len(events) == 1
     assert notes["uci_cancellation_transaction_rows"] == 1
     assert notes["uci_cancellations_used_as_labels"] is False
     assert "is_refund_abuse_simulated" not in orders
-

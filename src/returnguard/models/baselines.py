@@ -111,16 +111,22 @@ def train_and_evaluate_baselines(
                 "predicted_positive": scores >= config.threshold,
             }))
     rng = np.random.default_rng(config.random_seed)
-    permuted = rng.permutation(train[config.label_column].astype(bool).to_numpy())
-    permuted_model = fit_logistic(train, registry, config, labels=permuted)
-    permutation_scores = permuted_model.predict_proba(policy[feature_names])[:, 1]
-    permutation_ap = float(average_precision_score(policy[config.label_column], permutation_scores))
+    permutation_aps: list[float] = []
+    for _ in range(5):
+        permuted = rng.permutation(train[config.label_column].astype(bool).to_numpy())
+        permuted_model = fit_logistic(train, registry, config, labels=permuted)
+        permutation_scores = permuted_model.predict_proba(policy[feature_names])[:, 1]
+        permutation_aps.append(
+            float(average_precision_score(policy[config.label_column], permutation_scores))
+        )
+    permutation_ap = float(np.mean(permutation_aps))
     prevalence = float(policy[config.label_column].mean())
     if permutation_ap > prevalence + 0.15:
         raise ValueError("label permutation retained suspicious predictive performance")
     checks: dict[str, Any] = _anti_shortcut_check(train, policy, registry, config.random_seed)
     checks.update({
         "permutation_average_precision": permutation_ap,
+        "permutation_average_precision_runs": permutation_aps,
         "policy_selection_prevalence": prevalence,
         "feature_order_sha256": _feature_order_hash(registry),
     })

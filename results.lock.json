@@ -1,0 +1,450 @@
+{
+  "case_results_sha256": "20f3e7450f10e073607326b17fd48265f3e685f7a59bdb76f82d3f5b5364dcf2",
+  "confidence_intervals": {
+    "calibrated_average_precision": {
+      "lower_95": 0.7004505142021525,
+      "median": 0.7639879285726843,
+      "method": "customer-cluster bootstrap",
+      "resamples": 1000,
+      "upper_95": 0.8168542013743789
+    }
+  },
+  "freeze_manifest_sha256": "ae84862bb413f63d08e3a34b14d185a5b4bb14097bd529469806c029967f4266",
+  "metrics": {
+    "lightgbm_calibrated": {
+      "abuse_amount_recall": 0.7116900037387822,
+      "average_precision": 0.761477952372303,
+      "brier_score": 0.038132344281432654,
+      "f1": 0.6865671641791046,
+      "fn": 57,
+      "fp": 27,
+      "fpr": 0.018607856650585803,
+      "precision": 0.773109243697479,
+      "prevalence": 0.093125,
+      "recall": 0.6174496644295302,
+      "reliability_bins": [
+        {
+          "bin": 0,
+          "lower": 0.0,
+          "mean_probability": 0.010403541471893313,
+          "observed_prevalence": 0.01772525849335303,
+          "support": 1354,
+          "upper": 0.1
+        },
+        {
+          "bin": 1,
+          "lower": 0.1,
+          "mean_probability": 0.14398408009238625,
+          "observed_prevalence": 0.256,
+          "support": 125,
+          "upper": 0.2
+        },
+        {
+          "bin": 2,
+          "lower": 0.2,
+          "mean_probability": 0.22243829235206192,
+          "observed_prevalence": 0.5,
+          "support": 2,
+          "upper": 0.30000000000000004
+        },
+        {
+          "bin": 3,
+          "lower": 0.30000000000000004,
+          "mean_probability": null,
+          "observed_prevalence": null,
+          "support": 0,
+          "upper": 0.4
+        },
+        {
+          "bin": 4,
+          "lower": 0.4,
+          "mean_probability": null,
+          "observed_prevalence": null,
+          "support": 0,
+          "upper": 0.5
+        },
+        {
+          "bin": 5,
+          "lower": 0.5,
+          "mean_probability": 0.5018204449085426,
+          "observed_prevalence": 0.3225806451612903,
+          "support": 31,
+          "upper": 0.6000000000000001
+        },
+        {
+          "bin": 6,
+          "lower": 0.6000000000000001,
+          "mean_probability": 0.6096375383326851,
+          "observed_prevalence": 0.0,
+          "support": 1,
+          "upper": 0.7000000000000001
+        },
+        {
+          "bin": 7,
+          "lower": 0.7000000000000001,
+          "mean_probability": 0.7284923062339228,
+          "observed_prevalence": 1.0,
+          "support": 1,
+          "upper": 0.8
+        },
+        {
+          "bin": 8,
+          "lower": 0.8,
+          "mean_probability": 0.8333333333333334,
+          "observed_prevalence": 0.6666666666666666,
+          "support": 6,
+          "upper": 0.9
+        },
+        {
+          "bin": 9,
+          "lower": 0.9,
+          "mean_probability": 0.9999990000000001,
+          "observed_prevalence": 0.9625,
+          "support": 80,
+          "upper": 1.0
+        }
+      ],
+      "roc_auc": 0.9575899981035989,
+      "support": 1600,
+      "threshold": 0.5,
+      "tn": 1424,
+      "tp": 92
+    },
+    "lightgbm_raw": {
+      "abuse_amount_recall": 0.8073360215954131,
+      "average_precision": 0.8131513024001149,
+      "brier_score": 0.04416085702221131,
+      "f1": 0.6984126984126985,
+      "fn": 39,
+      "fp": 56,
+      "fpr": 0.03859407305306685,
+      "precision": 0.6626506024096386,
+      "prevalence": 0.093125,
+      "recall": 0.738255033557047,
+      "reliability_bins": [
+        {
+          "bin": 0,
+          "lower": 0.0,
+          "mean_probability": 0.009689748824199736,
+          "observed_prevalence": 0.008807045636509208,
+          "support": 1249,
+          "upper": 0.1
+        },
+        {
+          "bin": 1,
+          "lower": 0.1,
+          "mean_probability": 0.14017497337453824,
+          "observed_prevalence": 0.10666666666666667,
+          "support": 75,
+          "upper": 0.2
+        },
+        {
+          "bin": 2,
+          "lower": 0.2,
+          "mean_probability": 0.23852077181734616,
+          "observed_prevalence": 0.19047619047619047,
+          "support": 42,
+          "upper": 0.30000000000000004
+        },
+        {
+          "bin": 3,
+          "lower": 0.30000000000000004,
+          "mean_probability": 0.34685372865028874,
+          "observed_prevalence": 0.0625,
+          "support": 32,
+          "upper": 0.4
+        },
+        {
+          "bin": 4,
+          "lower": 0.4,
+          "mean_probability": 0.450369785923552,
+          "observed_prevalence": 0.2777777777777778,
+          "support": 36,
+          "upper": 0.5
+        },
+        {
+          "bin": 5,
+          "lower": 0.5,
+          "mean_probability": 0.550160672296369,
+          "observed_prevalence": 0.45454545454545453,
+          "support": 22,
+          "upper": 0.6000000000000001
+        },
+        {
+          "bin": 6,
+          "lower": 0.6000000000000001,
+          "mean_probability": 0.6462385509840739,
+          "observed_prevalence": 0.3181818181818182,
+          "support": 22,
+          "upper": 0.7000000000000001
+        },
+        {
+          "bin": 7,
+          "lower": 0.7000000000000001,
+          "mean_probability": 0.7484709530470179,
+          "observed_prevalence": 0.2857142857142857,
+          "support": 21,
+          "upper": 0.8
+        },
+        {
+          "bin": 8,
+          "lower": 0.8,
+          "mean_probability": 0.840794425032436,
+          "observed_prevalence": 0.4,
+          "support": 10,
+          "upper": 0.9
+        },
+        {
+          "bin": 9,
+          "lower": 0.9,
+          "mean_probability": 0.9886513532831915,
+          "observed_prevalence": 0.9120879120879121,
+          "support": 91,
+          "upper": 1.0
+        }
+      ],
+      "roc_auc": 0.9636492305699842,
+      "support": 1600,
+      "threshold": 0.5,
+      "tn": 1395,
+      "tp": 110
+    },
+    "logistic_regression": {
+      "abuse_amount_recall": 0.7453862880714633,
+      "average_precision": 0.6615001839413795,
+      "brier_score": 0.08231694285144336,
+      "f1": 0.5333333333333333,
+      "fn": 41,
+      "fp": 148,
+      "fpr": 0.1019986216402481,
+      "precision": 0.421875,
+      "prevalence": 0.093125,
+      "recall": 0.7248322147651006,
+      "reliability_bins": [
+        {
+          "bin": 0,
+          "lower": 0.0,
+          "mean_probability": 0.016297065050069715,
+          "observed_prevalence": 0.007575757575757576,
+          "support": 1056,
+          "upper": 0.1
+        },
+        {
+          "bin": 1,
+          "lower": 0.1,
+          "mean_probability": 0.14437504978546598,
+          "observed_prevalence": 0.06956521739130435,
+          "support": 115,
+          "upper": 0.2
+        },
+        {
+          "bin": 2,
+          "lower": 0.2,
+          "mean_probability": 0.2506985105556927,
+          "observed_prevalence": 0.078125,
+          "support": 64,
+          "upper": 0.30000000000000004
+        },
+        {
+          "bin": 3,
+          "lower": 0.30000000000000004,
+          "mean_probability": 0.3492613578784978,
+          "observed_prevalence": 0.14035087719298245,
+          "support": 57,
+          "upper": 0.4
+        },
+        {
+          "bin": 4,
+          "lower": 0.4,
+          "mean_probability": 0.44785159336950336,
+          "observed_prevalence": 0.23076923076923078,
+          "support": 52,
+          "upper": 0.5
+        },
+        {
+          "bin": 5,
+          "lower": 0.5,
+          "mean_probability": 0.549096076803924,
+          "observed_prevalence": 0.13513513513513514,
+          "support": 37,
+          "upper": 0.6000000000000001
+        },
+        {
+          "bin": 6,
+          "lower": 0.6000000000000001,
+          "mean_probability": 0.6564022412491364,
+          "observed_prevalence": 0.175,
+          "support": 40,
+          "upper": 0.7000000000000001
+        },
+        {
+          "bin": 7,
+          "lower": 0.7000000000000001,
+          "mean_probability": 0.7523226011956484,
+          "observed_prevalence": 0.28888888888888886,
+          "support": 45,
+          "upper": 0.8
+        },
+        {
+          "bin": 8,
+          "lower": 0.8,
+          "mean_probability": 0.8513109761118025,
+          "observed_prevalence": 0.5641025641025641,
+          "support": 39,
+          "upper": 0.9
+        },
+        {
+          "bin": 9,
+          "lower": 0.9,
+          "mean_probability": 0.963963405608579,
+          "observed_prevalence": 0.6421052631578947,
+          "support": 95,
+          "upper": 1.0
+        }
+      ],
+      "roc_auc": 0.9272105791423643,
+      "support": 1600,
+      "threshold": 0.5,
+      "tn": 1303,
+      "tp": 108
+    },
+    "rules": {
+      "abuse_amount_recall": 0.1884437168899304,
+      "average_precision": 0.3065195283060823,
+      "brier_score": 0.0744703125,
+      "f1": 0.15702479338842978,
+      "fn": 130,
+      "fp": 74,
+      "fpr": 0.05099931082012405,
+      "precision": 0.20430107526881722,
+      "prevalence": 0.093125,
+      "recall": 0.12751677852348994,
+      "reliability_bins": [
+        {
+          "bin": 0,
+          "lower": 0.0,
+          "mean_probability": 0.0,
+          "observed_prevalence": 0.010169491525423728,
+          "support": 885,
+          "upper": 0.1
+        },
+        {
+          "bin": 1,
+          "lower": 0.1,
+          "mean_probability": 0.12942477876106195,
+          "observed_prevalence": 0.1084070796460177,
+          "support": 452,
+          "upper": 0.2
+        },
+        {
+          "bin": 2,
+          "lower": 0.2,
+          "mean_probability": 0.251063829787234,
+          "observed_prevalence": 0.3829787234042553,
+          "support": 94,
+          "upper": 0.30000000000000004
+        },
+        {
+          "bin": 3,
+          "lower": 0.30000000000000004,
+          "mean_probability": 0.32692307692307704,
+          "observed_prevalence": 0.5,
+          "support": 52,
+          "upper": 0.4
+        },
+        {
+          "bin": 4,
+          "lower": 0.4,
+          "mean_probability": 0.4270833333333333,
+          "observed_prevalence": 0.4166666666666667,
+          "support": 24,
+          "upper": 0.5
+        },
+        {
+          "bin": 5,
+          "lower": 0.5,
+          "mean_probability": 0.5044117647058823,
+          "observed_prevalence": 0.17647058823529413,
+          "support": 68,
+          "upper": 0.6000000000000001
+        },
+        {
+          "bin": 6,
+          "lower": 0.6000000000000001,
+          "mean_probability": 0.6500000000000001,
+          "observed_prevalence": 0.15,
+          "support": 20,
+          "upper": 0.7000000000000001
+        },
+        {
+          "bin": 7,
+          "lower": 0.7000000000000001,
+          "mean_probability": 0.7000000000000001,
+          "observed_prevalence": 1.0,
+          "support": 1,
+          "upper": 0.8
+        },
+        {
+          "bin": 8,
+          "lower": 0.8,
+          "mean_probability": 0.825,
+          "observed_prevalence": 0.75,
+          "support": 4,
+          "upper": 0.9
+        },
+        {
+          "bin": 9,
+          "lower": 0.9,
+          "mean_probability": null,
+          "observed_prevalence": null,
+          "support": 0,
+          "upper": 1.0
+        }
+      ],
+      "roc_auc": 0.8508596246976166,
+      "support": 1600,
+      "threshold": 0.5,
+      "tn": 1377,
+      "tp": 19
+    }
+  },
+  "opened_at": "2026-09-01T15:53:47.647783+00:00",
+  "policy": {
+    "abuse_amount_recall": 0.9011734820458622,
+    "assumption_label": "Estimated from declared simulated cost assumptions; not realized savings.",
+    "comparison": {
+      "approve_all": {
+        "manual_review_rate": 0.0,
+        "realized_cost_paise": 854933050.35
+      },
+      "fixed_score_bands": {
+        "manual_review_rate": 0.048125,
+        "realized_cost_paise": 206935590.06999996
+      },
+      "returnguard_adaptive": {
+        "manual_review_rate": 0.048125,
+        "realized_cost_paise": 208972271.98749995
+      },
+      "score_to_review": {
+        "manual_review_rate": 0.074375,
+        "realized_cost_paise": 247523744.55
+      }
+    },
+    "estimated_net_value_protected_paise_per_1000": 403725486.47656256,
+    "legitimate_delay_rate": 0.011026878015161957,
+    "legitimate_rescue_count": 168,
+    "manual_reviews_per_1000": 48.125
+  },
+  "prevalence": 0.093125,
+  "production_performance_claim": false,
+  "results_sha256": "7a31af8fa51d87ab1fcc4efd5e290f7777a9370844c71a7a349d53cc1c58f3f2",
+  "schema_version": "2.0",
+  "simulation_disclosure": "Abuse outcomes and operational fields are simulated.",
+  "state": "LOCKED",
+  "supersedes": {
+    "path": "results.v1.lock.json",
+    "sha256": "8d451e1e35fe649150bd7e07623074774c7e80306c10dc81bdad067529b8a907"
+  },
+  "support": 1600,
+  "upgrade_reason": "The v1 result schema omitted reconstructable policy and confidence-interval fields. The model, predictions, operating contract, and case artifact are unchanged."
+}

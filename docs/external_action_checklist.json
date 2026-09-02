@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "razorpay_test_closure": {
+    "status": "REQUIRES_EXTERNAL_ACTION",
+    "steps": [
+      "Create Razorpay test-mode API keys.",
+      "Create and capture a test payment with sufficient refundable balance.",
+      "Set RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, and RAZORPAY_TEST_PAYMENT_ID in the local environment.",
+      "Set a test-mode webhook URL and RAZORPAY_WEBHOOK_SECRET.",
+      "Run the legitimate-rescue workflow and retain the sanitized refund id and audit export."
+    ],
+    "success_condition": "Razorpay test API returns a refund id and the webhook signature is validated."
+  }
+}

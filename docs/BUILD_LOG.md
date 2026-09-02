@@ -2,7 +2,6 @@
 
 ## 2026-08-31 - Phase 0/1
 
-- Treated the supplied parent-level `BRAIN1.md` as the `BRAIN.md` authority referenced elsewhere.
 - Initialized a Python `src/` package with strict Pydantic contracts, UTC timestamps, and integer paise.
 - Chose a deterministic fixture as the offline default; the official UCI downloader remains separate.
 - Added a deterministic UCI workbook transformer; it is tested with a tiny local workbook fixture but
@@ -25,10 +24,97 @@
 - `mypy src/returnguard`: passed, 23 source files checked.
 - `make verify PYTHON=/tmp/returnguard-venv/bin/python`: passed in 13 seconds.
 - Split support: train 4,800; calibration 800; policy selection 800; final test 1,600.
-- Policy-selection prevalence: 9.625%; label-permutation AP: 9.596%.
-- One-level decision-tree AP: 19.494%; no single numeric split trivially solves the label.
 - Development-period metrics are fixture-only simulation diagnostics, not performance targets or
   production evidence. No final-test metric was computed.
 
 The initial full-size replay exposed quadratic history scans. The point-in-time engine was changed
 to sorted timestamp bisection and per-customer maturity heaps without changing cutoff semantics.
+
+## 2026-09-01 - Official Transaction Foundation
+
+- Downloaded the official UCI Online Retail II archive from the documented source.
+- Validated archive identity, worksheets, schema, dates, missingness, duplicates, customer coverage,
+  cancellations, and invalid quantity/price rows.
+- Added invoice items, timestamped cancellation events, invoice-scoped guest customers, and complete
+  field-level source/derived/simulated provenance.
+- Added a physical final-truth seal. Development tables redact final labels, scenarios, outcomes,
+  verifier results, and feature replay.
+- Converted difficult legitimate scenarios into observable conditions including shared households,
+  defect batches, carrier incidents, high-value damage, first-order returns, and missing evidence.
+- Repeated the full generation with the same seed; every canonical table fingerprint matched.
+- UCI-backed shallow-tree AP was 0.1898. Five-permutation mean AP was 0.1193 against 0.08875
+  policy-selection prevalence. These are development diagnostics, not final results.
+- Source SHA-256: `572e36277c2390fbfde10664750731e0a86f55e33470d91919085f0408e67bfb`.
+- Generator configuration SHA-256: `901bde00e7d343b9a348150c7c2948a4431777cdd468918b0bb253335b7712b3`.
+- Transformed data SHA-256: `7c13c6d3aa853a7d0c0f914fcdc099785b376d4caaf719a8edfc4c6ede65715c`.
+
+### Gate evidence
+
+- `make verify-phase-1-5 PYTHON=/tmp/returnguard-venv/bin/python`: passed.
+- `pytest -q`: 26 passed at the Phase 1.5 checkpoint.
+- Ruff and strict mypy passed across 27 source files.
+- Final support and timestamp boundaries were exported while labels and verifier truth remained sealed.
+
+## 2026-09-01 - Model, Verifier, Policy, and Locked Evaluation
+
+- Fit LightGBM on train only and selected isotonic calibration on the calibration period only.
+- Added versioned point-in-time feature parity, TreeSHAP reason codes, one deterministic order-integrity verifier, Laplace-smoothed likelihood ratios, and separate Bayesian posterior decisions.
+- Selected the expected-cost operating contract on policy-selection data with 5% review capacity and a 20% legitimate-delay ceiling.
+- Regenerated two independent official-UCI benchmarks for seed robustness; their policy PR-AUC values were 0.7645 and 0.8248.
+- Completed 1,000-resample customer-cluster bootstrap, prevalence, label-noise, missing-feature, unseen-category, cold-start, hard-legitimate, and verifier-unavailable stress evidence.
+- Froze source, data, split, feature, model, calibrator, likelihood, threshold, policy, and cost hashes before final access.
+- Opened the final test once. The preserved v1 lock binds immutable case results. A v2 lock adds reconstructable policy and confidence-interval fields without changing the model, predictions, cases, or operating contract.
+- Exported and validated a complete bundle with file hashes and golden probability, action, and reason-code parity.
+
+### Locked evidence
+
+- Support 1,600; simulated prevalence 9.3125%; TP 92, FP 27, TN 1,424, FN 57.
+- Calibrated PR-AUC 0.7615; precision 77.31%; recall 61.74%; FPR 1.86%; Brier 0.0381.
+- Customer-cluster bootstrap PR-AUC 95% interval 0.7005–0.8169.
+- Originally reported 168 legitimate rescues, 48.125 reviews per 1,000, and a 1.10% value that was later identified as terminal legitimate intervention rather than elapsed delay.
+- Raw PR-AUC exceeded calibrated PR-AUC because isotonic probability ties reduced ranking; no post-final tuning was performed.
+
+## 2026-09-02 - API, Audit, Razorpay Boundary, and Dashboard
+
+- Added FastAPI endpoints, SQLite repositories, validated lifecycle transitions, immutable decisions, one-active-verifier enforcement, named operator gates, append-only audit triggers, and idempotent execution.
+- Added startup bundle validation and fail-closed health behavior.
+- Added a labelled mock Razorpay adapter for tests and a test-mode-only HTTP adapter with captured-payment, refundable-balance, idempotency, sanitized metadata, and raw-body webhook checks.
+- Added Portfolio, Review Queue, Case Detail, Evidence, and two-click Legitimate Rescue Streamlit views backed by locked artifacts and backend state.
+- Ran the rescue workflow twice without database edits. Both runs moved probability from 0.1290 to 0.01590 and completed through `MOCK_RAZORPAY_TEST_ADAPTER`.
+- Genuine Razorpay test closure remains an external action because no credentials or captured test payment were supplied.
+
+### Gate evidence
+
+- API integration and Razorpay adapter suite: 7 passed.
+- Trusted-bundle API health returned `healthy`.
+- Streamlit returned HTTP 200 on the local smoke port.
+
+## 2026-09-02 - Submission Hardening
+
+- Published the sanitized locked result and submission manifest while excluding raw data, generated datasets, model binaries, SQLite databases, credentials, and caches.
+- Added evaluator, architecture, data, model, policy, limitations, responsible-use, and five-minute demo documentation.
+- Added preflight checks for result hashes, confusion and denominator arithmetic, policy-value arithmetic, README claims, dashboard artifact loading, bundle/golden validation, simulation wording, test-mode wording, secrets, and local-file privacy.
+- Confirmed all local development context remained ignored and untracked.
+- Created a fresh repository copy without ignored content, installed into a new virtual environment, and ran the complete clean-repository gate.
+
+### Final gate evidence
+
+- Main worktree: 40 tests passed; Ruff passed; strict mypy passed across 51 source files.
+- `make verify`: passed with deterministic fixture regeneration, baseline training, 40 tests, Ruff, and mypy.
+- `make verify-phase-3`: passed; API integration 4/4.
+- `make verify-phase-4`: passed; API/Razorpay integration 7/7.
+- Full artifact preflight: passed with valid bundle and 112 public files scanned for secrets.
+- Fresh repository copy: clean installation passed; 40 tests, Ruff, mypy, and repository-only preflight passed.
+- API startup validated the trusted bundle; dashboard smoke returned HTTP 200.
+- Genuine Razorpay test closure remains external and is not claimed.
+- Completed previously omitted friction-cost and missing-feature-group calculations using policy-selection data only; model and policy artifacts were unchanged.
+- Exported a hash-bound post-open slice summary from the immutable case file: cold-start support 128 with PR-AUC 0.7916; named hard-legitimate slices were underpowered.
+
+## 2026-09-02 - Metric Integrity Correction and Payment Boundary
+
+- Preserved the frozen v1 locks, case predictions, model, threshold, likelihoods, and policy byte-for-byte.
+- Corrected the customer-impact definitions from the case export: 184 of 1,451 legitimate cases were initially challenged, 168 were rescued, and 16 retained a terminal intervention.
+- Separated 55 simulated requests above original captured payment. Removing this deterministic subgroup reduced frozen raw AP from 0.8132 to 0.5935 and threshold recall from 61.74% to 39.36%.
+- Identified `amount_paid_ratio` as a direct deterministic signal for that subgroup and documented the resulting shortcut risk without retraining.
+- Withdrew the previous monetary headline because v1 has no point-in-time prior-refund ledger and cannot certify executable or incremental value.
+- Added prospective payment snapshots, refund-ledger entries, deterministic pre-model integrity decisions, and atomic balance reservations.

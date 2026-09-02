@@ -1,0 +1,18 @@
+{
+  "external_actions": [
+    "Razorpay test-mode closure requires merchant credentials and a captured test payment."
+  ],
+  "certified_incremental_monetary_result": false,
+  "genuine_razorpay_test_refund": false,
+  "metric_integrity_correction_sha256": "2621ed5ac2266ccde8dc081e7f605d9e4712ad2e0dc5062fecbffb1bc817ba2f",
+  "model_bundle_manifest_sha256": "3610fe307f8c7411f82da88c88325e9c47c724cf3e519e6844ade399281f71da",
+  "project": "ReturnGuard",
+  "policy_transition_table_sha256": "30d7ee0304552e3a09e7956f87da632b0565399b4bd16e73908729ece50b0034",
+  "public_case_audit_sha256": "1219dabd73679abc8f78bd62991911d47e511c033edf5689e13acd28b3d5cce5",
+  "results_content_sha256": "7a31af8fa51d87ab1fcc4efd5e290f7777a9370844c71a7a349d53cc1c58f3f2",
+  "results_lock_sha256": "1832c422d79bc965692f89fe910e9dae5b8eca3240116d3c3b9ac842cbaba986",
+  "schema_version": "1.0",
+  "slice_results_sha256": "ba86d7aa6c1c63fd32d4d3b421c706cc7cd374e785c225b048bae57721bc85d9",
+  "source_data_sha256": "572e36277c2390fbfde10664750731e0a86f55e33470d91919085f0408e67bfb",
+  "transformed_data_sha256": "7c13c6d3aa853a7d0c0f914fcdc099785b376d4caaf719a8edfc4c6ede65715c"
+}

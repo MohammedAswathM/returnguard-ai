@@ -1,22 +1,25 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from dataclasses import asdict
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import pandas as pd
 
 from returnguard.config import DataConfig
+from returnguard.data.final_lock import seal_final_truth
+from returnguard.data.fingerprints import file_sha256, object_sha256
+from returnguard.data.provenance import field_provenance
 from returnguard.data.splitter import assign_chronological_partitions, summarize_splits
 from returnguard.data.uci import build_uci_foundation
+from returnguard.data.validation import validate_uci_archive
 
 TABLES = (
-    "customers", "orders", "payments", "refund_requests", "verification_events",
-    "risk_decisions", "audit_events",
+    "customers", "orders", "order_items", "payments", "transaction_events",
+    "refund_requests", "verification_events", "risk_decisions", "audit_events",
 )
 HARD_LEGITIMATE = (
     "shared_household", "loyal_high_volume", "product_defect_burst", "apparel_size_fit",
@@ -33,21 +36,13 @@ def _iso(value: datetime) -> str:
     return value.astimezone(UTC).isoformat().replace("+00:00", "Z")
 
 
-def _fingerprint(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 def _empty_table(columns: list[str]) -> pd.DataFrame:
     return pd.DataFrame(columns=columns)
 
 
 def _fixture_foundation(
     config: DataConfig, rng: np.random.Generator, start: datetime
-) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, dict[str, Any]]:
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, dict[str, Any]]:
     customer_count = max(250, config.n_orders // 8)
     customer_ids = np.array([f"cus_{i:06d}" for i in range(customer_count)])
     countries = np.array(["GB", "GB", "GB", "IE", "FR", "DE"])
@@ -85,7 +80,17 @@ def _fixture_foundation(
             "paid_amount_paise": gross, "status": "captured",
             "paid_at": _iso(ordered + timedelta(minutes=2)),
         })
-    return customers, pd.DataFrame(order_rows), pd.DataFrame(payment_rows), {
+    orders = pd.DataFrame(order_rows)
+    order_items = pd.DataFrame({
+        "order_item_id": [f"item_{index:07d}_0000" for index in range(len(orders))],
+        "order_id": orders["order_id"], "product_id": "fixture_product",
+        "description_present": True, "quantity": orders["item_count"],
+        "unit_price_source_gbp": 0.0,
+    })
+    transaction_events = _empty_table([
+        "transaction_event_id", "customer_id", "event_time", "event_type", "source_invoice_id",
+    ])
+    return customers, orders, pd.DataFrame(payment_rows), order_items, transaction_events, {
         "fixture_disclosure": "Transaction foundation is synthetic."
     }
 
@@ -98,11 +103,19 @@ def generate_benchmark(config: DataConfig, output_dir: Path | None = None) -> di
     if config.source_mode == "uci":
         if config.uci_archive is None:  # Defensive narrowing beyond config validation.
             raise ValueError("uci_archive is required")
-        customers, orders, payments, foundation_notes = build_uci_foundation(
+        source_validation = validate_uci_archive(
+            config.uci_archive, output / "source_validation.json"
+        )
+        if source_validation["status"] != "VALIDATED_OFFICIAL_SOURCE":
+            raise ValueError("UCI source failed official identity validation")
+        customers, orders, payments, order_items, transaction_events, foundation_notes = build_uci_foundation(
             config.uci_archive, config.n_orders, config.seed, config.uci_gbp_to_inr
         )
     else:
-        customers, orders, payments, foundation_notes = _fixture_foundation(config, rng, start)
+        source_validation = None
+        customers, orders, payments, order_items, transaction_events, foundation_notes = (
+            _fixture_foundation(config, rng, start)
+        )
 
     eligible = np.arange(config.n_orders)
     replace = config.n_refund_requests > len(eligible)
@@ -114,16 +127,52 @@ def generate_benchmark(config: DataConfig, output_dir: Path | None = None) -> di
     legitimate_indices = np.flatnonzero(~exact_abuse)
     hard_count = min(len(legitimate_indices), round(config.n_refund_requests * config.hard_legitimate_fraction))
     hard_indices = set(int(x) for x in rng.choice(legitimate_indices, hard_count, replace=False))
+    hard_scenario_by_index = {
+        index: HARD_LEGITIMATE[position % len(HARD_LEGITIMATE)]
+        for position, index in enumerate(sorted(hard_indices))
+    }
+    first_order_ids = set(
+        orders.sort_values("ordered_at").groupby("customer_id", sort=False).first()["order_id"]
+    )
+    first_order_candidate = next(
+        (
+            index for index in sorted(hard_indices)
+            if str(orders.iloc[int(selected[index])]["order_id"]) in first_order_ids
+        ),
+        None,
+    )
+    if first_order_candidate is not None:
+        hard_scenario_by_index[first_order_candidate] = "first_order_return"
+    customer_order_counts = cast(pd.Series, orders["customer_id"].value_counts())
+    loyal_cutoff = float(customer_order_counts.quantile(0.9))
+    loyal_customers = set(customer_order_counts.loc[customer_order_counts >= loyal_cutoff].index)
+    loyal_candidate = next(
+        (
+            index for index in sorted(hard_indices)
+            if str(orders.iloc[int(selected[index])]["customer_id"]) in loyal_customers
+        ),
+        None,
+    )
+    if loyal_candidate is not None:
+        hard_scenario_by_index[loyal_candidate] = "loyal_high_volume"
     reasons = np.array(["missing", "damaged", "not_received", "size", "other"])
     request_rows: list[dict[str, Any]] = []
     verification_rows: list[dict[str, Any]] = []
+    shared_household_count = 0
     for request_i, order_i in enumerate(selected):
         order = orders.iloc[int(order_i)]
         delivered = datetime.fromisoformat(str(order["delivered_at"]).replace("Z", "+00:00"))
         abuse = bool(exact_abuse[request_i])
         scenario = str(rng.choice(ABUSE_SCENARIOS)) if abuse else "routine_legitimate"
-        if not abuse and request_i in hard_indices:
-            scenario = HARD_LEGITIMATE[request_i % len(HARD_LEGITIMATE)]
+        if not abuse and request_i in hard_scenario_by_index:
+            scenario = hard_scenario_by_index[request_i]
+        if scenario == "shared_household":
+            household = shared_household_count // 2
+            orders.at[int(order_i), "shipping_address_id"] = f"sim_household_addr_{household:04d}"
+            orders.at[int(order_i), "device_id"] = f"sim_household_dev_{household:04d}"
+            shared_household_count += 1
+        if scenario == "product_defect_burst":
+            orders.at[int(order_i), "category"] = "simulated_defect_batch"
         fast = abuse and scenario in {"fast_after_delivery", "serial_claims", "returnless_exploitation"}
         delay_hours = float(rng.uniform(1, 30) if fast else rng.uniform(12, 24 * 21))
         requested = delivered + timedelta(hours=delay_hours)
@@ -142,6 +191,10 @@ def generate_benchmark(config: DataConfig, output_dir: Path | None = None) -> di
         reason = str(rng.choice(reasons, p=[0.28, 0.28, 0.22, 0.10, 0.12]))
         if scenario == "apparel_size_fit":
             reason = "size"
+        elif scenario in {"product_defect_burst", "legitimate_high_value_damage"}:
+            reason = "damaged"
+        elif scenario == "carrier_incident":
+            reason = "not_received"
         request_id = f"rr_{request_i:07d}"
         outcome_at = requested + timedelta(days=config.outcome_delay_days + int(rng.integers(0, 10)))
         request_rows.append({
@@ -156,6 +209,12 @@ def generate_benchmark(config: DataConfig, output_dir: Path | None = None) -> di
         })
         if scenario == "missing_evidence_inconclusive":
             result = "inconclusive"
+        elif scenario in {
+            "shared_household", "loyal_high_volume", "product_defect_burst",
+            "carrier_incident", "legitimate_high_value_damage", "first_order_return",
+            "consistent_evidence_rescue",
+        }:
+            result = "consistent"
         elif abuse and rng.random() < 0.70:
             result = "inconsistent"
         elif not abuse and rng.random() < 0.86:
@@ -176,6 +235,9 @@ def generate_benchmark(config: DataConfig, output_dir: Path | None = None) -> di
     )
     split_map = requests[["refund_request_id", "partition"]]
     verifications = pd.DataFrame(verification_rows).merge(split_map, on="refund_request_id", how="left")
+    requests, verifications, final_lock = seal_final_truth(
+        requests, verifications, output.parent / f"{output.name}_locked_final"
+    )
 
     train_customers = set(requests.loc[requests["partition"] == "train", "customer_id"])
     final_rows = requests.loc[requests["partition"] == "final_test"]
@@ -190,7 +252,8 @@ def generate_benchmark(config: DataConfig, output_dir: Path | None = None) -> di
     assert not set(cold_start["challenge_customer_id"]) & train_customers
 
     tables = {
-        "customers": customers, "orders": orders, "payments": payments,
+        "customers": customers, "orders": orders, "order_items": order_items,
+        "payments": payments, "transaction_events": transaction_events,
         "refund_requests": requests, "verification_events": verifications,
         "risk_decisions": _empty_table([
             "decision_id", "refund_request_id", "model_version", "raw_score",
@@ -206,10 +269,16 @@ def generate_benchmark(config: DataConfig, output_dir: Path | None = None) -> di
     for name, table in tables.items():
         path = output / f"{name}.csv"
         table.to_csv(path, index=False, lineterminator="\n")
-        fingerprints[name] = _fingerprint(path)
+        fingerprints[name] = file_sha256(path)
     cold_start.to_csv(output / "cold_start_mapping.csv", index=False, lineterminator="\n")
-    fingerprints["cold_start_mapping"] = _fingerprint(output / "cold_start_mapping.csv")
+    fingerprints["cold_start_mapping"] = file_sha256(output / "cold_start_mapping.csv")
     summaries = [asdict(item) for item in summarize_splits(requests, "is_refund_abuse_simulated")]
+    development_scenario_support = {
+        str(name): int(count)
+        for name, count in requests.loc[
+            requests["partition"] != "final_test", "simulation_scenario"
+        ].value_counts().sort_index().items()
+    }
     metadata = {
         "schema_version": config.schema_version,
         "generator_seed": config.seed,
@@ -219,11 +288,20 @@ def generate_benchmark(config: DataConfig, output_dir: Path | None = None) -> di
             if config.source_mode == "fixture" else "UCI-derived transaction base with simulated labels."
         ),
         "config": config.model_dump(mode="json"),
+        "generator_config_fingerprint_sha256": object_sha256(config.model_dump(mode="json")),
         "split_summary": summaries,
+        "split_fingerprint_sha256": object_sha256(summaries),
+        "development_scenario_support": development_scenario_support,
         "fingerprints": fingerprints,
+        "transformed_data_fingerprint_sha256": object_sha256(fingerprints),
         "label_disclosure": "is_refund_abuse_simulated is generated and is not a UCI cancellation label.",
         "cold_start_disclosure": "Mapping is separate and does not alter the primary final-test rows.",
+        "final_lock": final_lock,
         "foundation_notes": foundation_notes,
+        "source_validation": source_validation,
+        "field_provenance": field_provenance({
+            name: [str(column) for column in table.columns] for name, table in tables.items()
+        }),
     }
     metadata_path = output / "metadata.json"
     metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
