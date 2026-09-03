@@ -1,14 +1,32 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "razorpay_test_closure": {
-    "status": "REQUIRES_EXTERNAL_ACTION",
-    "steps": [
-      "Create Razorpay test-mode API keys.",
-      "Create and capture a test payment with sufficient refundable balance.",
-      "Set RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, and RAZORPAY_TEST_PAYMENT_ID in the local environment.",
-      "Set a test-mode webhook URL and RAZORPAY_WEBHOOK_SECRET.",
-      "Run the legitimate-rescue workflow and retain the sanitized refund id and audit export."
+    "status": "SUCCESS",
+    "last_safe_attempt": {
+      "credentials_complete": true,
+      "authoritative_payment_fetch": "VERIFIED",
+      "captured_status": true,
+      "currency": "INR",
+      "payment_identifier_contains_whitespace": false,
+      "payment_identifier_contract_valid": true,
+      "genuine_refund_effect_observed": true,
+      "public_tunnel_reachable": true,
+      "refund_amount_paise": 100,
+      "refund_replay_same_effect": true,
+      "running_refund_adapter": "RAZORPAY_TEST_MODE",
+      "test_key_prefix_valid": true,
+      "webhook_observed": true,
+      "webhook_secret_present": true
+    },
+    "completed_checks": [
+      "Public HTTPS health endpoint reached the healthy backend.",
+      "Authoritative payment state passed captured, INR, scope, and balance guards.",
+      "One 100-paise test refund remained processing until signed webhook confirmation.",
+      "Identical execute replay returned the same effect and authoritative refund count increased by one.",
+      "Published evidence contains no credentials, identifiers, signatures, or payloads."
     ],
+    "local_api_command": "set -a; source .env; set +a; /tmp/returnguard-venv/bin/python scripts/run_api.py",
+    "webhook_route": "POST /api/v1/webhooks/razorpay",
     "success_condition": "Razorpay test API returns a refund id and the webhook signature is validated."
   }
 }

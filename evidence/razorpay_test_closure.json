@@ -1,0 +1,68 @@
+{
+  "api_command": "python scripts/run_api.py",
+  "attempt_history": [
+    {
+      "genuine_effect": false,
+      "outcome": "BLOCKED_EXTERNAL",
+      "reason_code": "TEST_PAYMENT_IDENTIFIER_CONTRACT_INVALID"
+    },
+    {
+      "genuine_effect": false,
+      "outcome": "BLOCKED_EXTERNAL",
+      "reason_code": "PUBLIC_BACKEND_USING_MOCK_ADAPTER"
+    },
+    {
+      "genuine_effect": false,
+      "outcome": "FAILED_SAFE",
+      "reason_code": "MERCHANT_SCOPE_MISMATCH"
+    }
+  ],
+  "authoritative_payment": {
+    "account_scope_access": true,
+    "amount_range": "INR_100_TO_999",
+    "bounded_partial_refund_possible": true,
+    "currency": "INR",
+    "current_refund_state_available": true,
+    "had_prior_refunds_before_closure": false,
+    "status": "captured"
+  },
+  "checks": {
+    "authoritative_payment_fetch": "VERIFIED",
+    "credentials_complete": true,
+    "environment_file_git_ignored": true,
+    "environment_file_untracked": true,
+    "local_reservation": "FINALIZED_AFTER_SIGNED_WEBHOOK",
+    "payment_identifier_contract_valid": true,
+    "refund_dispatch": "GENUINE_TEST_MODE_ONE_RUPEE",
+    "refund_replay": "SAME_EFFECT_NO_SECOND_REFUND",
+    "test_key_prefix_valid": true,
+    "webhook_observation": "RAW_BODY_SIGNATURE_VALIDATED",
+    "webhook_secret_present": true
+  },
+  "completed_at_utc": "2026-09-03T08:48:54Z",
+  "contains_credentials_or_identifiers": false,
+  "outcome": {
+    "adapter": "RAZORPAY_TEST_MODE",
+    "authoritative_refund_count_delta": 1,
+    "authoritative_refunded_amount_delta_paise": 100,
+    "dispatch_state": "REFUND_PROCESSING",
+    "execution_replay_same_effect": true,
+    "final_state": "REFUNDED",
+    "refund_amount_paise": 100,
+    "refund_status": "processed",
+    "signed_webhook_event_type_counts": {
+      "refund.created": 1,
+      "refund.processed": 1
+    }
+  },
+  "public_tunnel": {
+    "backend_healthy": true,
+    "bundle_valid": true,
+    "delivery_reachable": true,
+    "refund_completion": "SIGNED_WEBHOOK_REQUIRED",
+    "running_refund_adapter": "RAZORPAY_TEST_MODE"
+  },
+  "schema_version": "1.1",
+  "status": "SUCCESS",
+  "webhook_route": "POST /api/v1/webhooks/razorpay"
+}

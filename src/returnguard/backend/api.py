@@ -158,6 +158,12 @@ def create_app(
         return {
             "status": "healthy" if runtime.healthy else "degraded",
             "bundle_valid": runtime.healthy,
+            "refund_adapter": service.gateway.provider_name,
+            "refund_completion": (
+                "SIGNED_WEBHOOK_REQUIRED"
+                if service.gateway.requires_webhook_confirmation
+                else "IMMEDIATE_ADAPTER_CONFIRMATION"
+            ),
             "error": runtime.validation_error,
         }
 
@@ -173,10 +179,19 @@ def create_app(
         except json.JSONDecodeError as error:
             raise HTTPException(status_code=400, detail="invalid webhook JSON") from error
         event_type = str(payload.get("event", "unknown"))
-        event_id = str(payload.get("id") or hashlib.sha256(raw_body).hexdigest())
+        event_id = hashlib.sha256(raw_body).hexdigest()
         inserted = repository.record_webhook(
             event_id, event_type, hashlib.sha256(raw_body).hexdigest(), service._now()
         )
-        return {"accepted": True, "duplicate": not inserted, "event_type": event_type}
+        reconciliation: dict[str, Any] = {"matched": False, "status": "DUPLICATE"}
+        if inserted:
+            refund_entity = payload.get("payload", {}).get("refund", {}).get("entity", {})
+            gateway_refund_id = str(refund_entity.get("id", ""))
+            if gateway_refund_id.startswith("rfnd_"):
+                reconciliation = service.reconcile_refund_webhook(gateway_refund_id, event_type)
+        return {
+            "accepted": True, "duplicate": not inserted, "event_type": event_type,
+            "matched": reconciliation["matched"], "refund_status": reconciliation["status"],
+        }
 
     return app

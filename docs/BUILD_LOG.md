@@ -118,3 +118,17 @@ to sorted timestamp bisection and per-customer maturity heaps without changing c
 - Identified `amount_paid_ratio` as a direct deterministic signal for that subgroup and documented the resulting shortcut risk without retraining.
 - Withdrew the previous monetary headline because v1 has no point-in-time prior-refund ledger and cannot certify executable or incremental value.
 - Added prospective payment snapshots, refund-ledger entries, deterministic pre-model integrity decisions, and atomic balance reservations.
+
+## 2026-09-03 - Razorpay Test-Mode Closure Attempt
+
+- Confirmed the local environment file is ignored and untracked without reading or displaying its contents.
+- Confirmed that required credentials and webhook configuration are present and that the API key uses the test-mode prefix.
+- After the identifier was corrected, an authoritative test-mode lookup verified credential-scoped access, captured status, INR currency, current refund state, and sufficient balance for a bounded partial refund.
+- Confirmed that the externally managed HTTPS tunnel reaches the healthy backend.
+- The running Windows API used `MOCK_RAZORPAY_TEST_ADAPTER`; its ₹1 local execution replayed idempotently, while authoritative Razorpay follow-up confirmed zero refunds and no genuine effect.
+- Updated the identifier-free closure record with status `BLOCKED_EXTERNAL` and the exact API restart action required.
+- Hardened the genuine adapter so the configured payment ID is not serialized into local snapshots or response metadata and signed webhook confirmation is required before a genuine reservation is finalized.
+- Restarted the public backend with `RAZORPAY_TEST_MODE` and `SIGNED_WEBHOOK_REQUIRED` health capabilities.
+- Executed one bounded 100-paise test-mode refund after fresh authoritative payment checks.
+- Observed signed `refund.created` and `refund.processed` events through the external HTTPS tunnel; `refund.processed` finalized the reservation.
+- Replayed the identical execute request and confirmed the same effect, one authoritative refund-count increase, and an exact 100-paise refunded-amount increase.

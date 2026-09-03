@@ -17,6 +17,7 @@ class RefundResult:
 class RefundGateway(Protocol):
     provider_name: str
     authoritative_balance: bool
+    requires_webhook_confirmation: bool
 
     def refund(self, request_id: str, amount_paise: int, idempotency_key: str) -> RefundResult: ...
 
@@ -31,6 +32,7 @@ class MockRazorpayGateway:
 
     provider_name = "MOCK_RAZORPAY_TEST_ADAPTER"
     authoritative_balance = False
+    requires_webhook_confirmation = False
 
     def __init__(self, fail: bool = False) -> None:
         self.fail = fail

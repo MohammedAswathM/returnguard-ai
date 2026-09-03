@@ -53,8 +53,39 @@ close(results["policy"]["estimated_net_value_protected_paise_per_1000"], expecte
 submission = json.loads(Path("submission_manifest.json").read_text(encoding="utf-8"))
 if submission["results_lock_sha256"] != file_sha256(results_path):
     raise ValueError("submission manifest results hash mismatch")
-if submission["genuine_razorpay_test_refund"] is not False:
-    raise ValueError("genuine Razorpay status is not supported by evidence")
+closure_path = Path("evidence/razorpay_test_closure.json")
+if submission.get("razorpay_test_closure_evidence_sha256") != file_sha256(closure_path):
+    raise ValueError("submission manifest Razorpay closure evidence hash mismatch")
+closure: dict[str, Any] = json.loads(closure_path.read_text(encoding="utf-8"))
+if closure.get("contains_credentials_or_identifiers") is not False:
+    raise ValueError("Razorpay closure evidence is not declared identifier-free")
+if submission.get("razorpay_test_closure_status") != closure["status"]:
+    raise ValueError("submission manifest Razorpay closure status mismatch")
+genuine_closure = closure.get("status") == "SUCCESS"
+if submission.get("genuine_razorpay_test_refund") is not genuine_closure:
+    raise ValueError("genuine Razorpay status is not supported by closure evidence")
+if genuine_closure:
+    closure_outcome = closure.get("outcome", {})
+    closure_checks = closure.get("checks", {})
+    if closure_checks.get("refund_dispatch") != "GENUINE_TEST_MODE_ONE_RUPEE":
+        raise ValueError("genuine Razorpay dispatch evidence is incomplete")
+    if closure_checks.get("webhook_observation") != "RAW_BODY_SIGNATURE_VALIDATED":
+        raise ValueError("genuine Razorpay webhook evidence is incomplete")
+    if closure_outcome.get("refund_amount_paise") != 100:
+        raise ValueError("genuine Razorpay refund was not the bounded amount")
+    if closure_outcome.get("authoritative_refund_count_delta") != 1:
+        raise ValueError("genuine Razorpay exactly-once count is unsupported")
+    if closure_outcome.get("authoritative_refunded_amount_delta_paise") != 100:
+        raise ValueError("genuine Razorpay authoritative amount delta is unsupported")
+    if closure_outcome.get("execution_replay_same_effect") is not True:
+        raise ValueError("genuine Razorpay replay evidence is incomplete")
+    if closure_outcome.get("final_state") != "REFUNDED":
+        raise ValueError("genuine Razorpay terminal state is unsupported")
+else:
+    if closure.get("checks", {}).get("refund_dispatch") not in {
+        "NOT_ATTEMPTED", "NO_GENUINE_RAZORPAY_EFFECT",
+    }:
+        raise ValueError("Razorpay closure evidence conflicts with blocked status")
 if submission.get("certified_incremental_monetary_result") is not False:
     raise ValueError("v1 cannot support a certified incremental monetary result")
 

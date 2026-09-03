@@ -303,18 +303,58 @@ class ReturnGuardService:
                 "Refund gateway failed; no success was recorded.", metadata={"error_type": type(error).__name__},
             )
             raise RuntimeError("refund failed safe") from error
-        self.repository.finalize_refund(refund_id, result.refund_id, self._now())
+        self.repository.attach_gateway_refund(refund_id, result.refund_id)
+        awaiting_webhook = self.gateway.requires_webhook_confirmation
+        status = "REFUND_PROCESSING" if awaiting_webhook else "REFUNDED"
+        if not awaiting_webhook:
+            self.repository.finalize_refund(refund_id, result.refund_id, self._now())
         values = {
             "refund_request_id": request_id, "idempotency_key": key,
-            "gateway_refund_id": result.refund_id, "status": "REFUNDED",
+            "gateway_refund_id": result.refund_id, "status": status,
             "response_json": json.dumps(result.metadata, sort_keys=True),
             "created_at": now, "updated_at": self._now(),
         }
         self.repository.add_execution(values)
-        self.repository.set_state(request_id, "REFUNDED", values["updated_at"])
+        self.repository.set_state(request_id, status, values["updated_at"])
         self._audit(
-            request_id, "REFUND_EXECUTED", "REFUND_PROCESSING", "REFUNDED",
-            "Gateway confirmed refund in the configured adapter.",
-            metadata={"gateway_refund_id": result.refund_id, "provider": self.gateway.provider_name},
+            request_id,
+            "REFUND_DISPATCHED" if awaiting_webhook else "REFUND_EXECUTED",
+            "REFUND_PROCESSING", status,
+            (
+                "Refund dispatch accepted; awaiting signed gateway webhook."
+                if awaiting_webhook else "Gateway confirmed refund in the configured adapter."
+            ),
+            metadata={"provider": self.gateway.provider_name},
         )
         return values
+
+    def reconcile_refund_webhook(self, gateway_refund_id: str, event_type: str) -> dict[str, Any]:
+        entry = self.repository.refund_by_gateway_id(gateway_refund_id)
+        if entry is None:
+            return {"matched": False, "status": "UNMATCHED"}
+        request_id = str(entry["refund_request_id"])
+        if entry["status"] in {"succeeded", "failed", "released"}:
+            execution = self.repository.execution(request_id)
+            return {"matched": True, "status": execution["status"] if execution else "UNKNOWN"}
+        now = self._now()
+        if event_type == "refund.processed":
+            self.repository.finalize_refund(str(entry["refund_id"]), gateway_refund_id, now)
+            self.repository.update_execution_status(request_id, "REFUNDED", now)
+            self.repository.set_state(request_id, "REFUNDED", now)
+            self._audit(
+                request_id, "REFUND_CONFIRMED", "REFUND_PROCESSING", "REFUNDED",
+                "Signed gateway webhook confirmed refund processing.",
+                metadata={"provider": self.gateway.provider_name},
+            )
+            return {"matched": True, "status": "REFUNDED"}
+        if event_type == "refund.failed":
+            self.repository.release_refund(str(entry["refund_id"]), now)
+            self.repository.update_execution_status(request_id, "FAILED_SAFE", now)
+            self.repository.set_state(request_id, "FAILED_SAFE", now)
+            self._audit(
+                request_id, "REFUND_FAILED", "REFUND_PROCESSING", "FAILED_SAFE",
+                "Signed gateway webhook reported refund failure; reservation released.",
+                metadata={"provider": self.gateway.provider_name},
+            )
+            return {"matched": True, "status": "FAILED_SAFE"}
+        return {"matched": True, "status": "REFUND_PROCESSING"}

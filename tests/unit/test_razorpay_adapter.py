@@ -27,14 +27,17 @@ def test_razorpay_test_gateway_checks_balance_and_idempotency_header() -> None:
     )
     gateway = RazorpayTestGateway("rzp_test_key", "secret", "pay_test", client)
     payment = gateway.payment_snapshot(
-        "configured-test-merchant", "pay_test", "order-1", "INR",
+        "configured-test-merchant", "configured-test-payment", "order-1", "INR",
         datetime(2026, 9, 2, tzinfo=UTC),
     )
     assert payment.refundable_balance_paise == 8_000
+    assert payment.payment_id == "configured-test-payment"
+    assert payment.razorpay_payment_id is None
     assert payment.source == "RAZORPAY_TEST_API"
     result = gateway.refund("rr-1", 5_000, "deterministic-key")
     assert result.refund_id == "rfnd_test"
     assert result.metadata["adapter"] == "RAZORPAY_TEST_MODE"
+    assert "payment_id" not in result.metadata
     assert seen_header == ["deterministic-key"]
 
 

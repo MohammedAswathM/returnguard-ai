@@ -58,6 +58,11 @@ class DeterministicRuntime:
         return probability, "RETURN_FIRST"
 
 
+class WebhookConfirmedGateway(MockRazorpayGateway):
+    provider_name = "RAZORPAY_TEST_MODE"
+    requires_webhook_confirmation = True
+
+
 def case_body(probability: float = 0.2) -> dict[str, Any]:
     return {
         "merchant_id": "merchant-1", "customer_id": "customer-1",
@@ -167,7 +172,10 @@ def test_invalid_bundle_degrades_health_and_fails_closed(tmp_path: Path) -> None
         runtime_override=DeterministicRuntime(healthy=False),  # type: ignore[arg-type]
     )
     client = LocalClient(app)
-    assert client.get("/health").json()["status"] == "degraded"
+    health = client.get("/health").json()
+    assert health["status"] == "degraded"
+    assert health["refund_adapter"] == "MOCK_RAZORPAY_TEST_ADAPTER"
+    assert health["refund_completion"] == "IMMEDIATE_ADAPTER_CONFIRMATION"
     client.post("/api/v1/refund-requests/rr-safe", json=case_body())
     assert client.post("/api/v1/refund-requests/rr-safe/score").status_code == 503
     audit = client.get("/api/v1/refund-requests/rr-safe/audit").json()
@@ -219,3 +227,35 @@ def test_webhook_replay_is_idempotent(tmp_path: Path, monkeypatch: Any) -> None:
     second = client.post("/api/v1/webhooks/razorpay", content=raw, headers=headers)
     assert first.json()["duplicate"] is False
     assert second.json()["duplicate"] is True
+
+
+def test_signed_webhook_finalizes_reservation_once(tmp_path: Path, monkeypatch: Any) -> None:
+    monkeypatch.setenv("RAZORPAY_WEBHOOK_SECRET", "test-webhook-secret")
+    gateway = WebhookConfirmedGateway()
+    app = create_app(
+        database_path=tmp_path / "webhook-finalize.db", gateway=gateway,
+        runtime_override=DeterministicRuntime(),  # type: ignore[arg-type]
+    )
+    client = LocalClient(app)
+    client.post("/api/v1/refund-requests/rr-webhook", json=case_body())
+    client.post("/api/v1/refund-requests/rr-webhook/score")
+    dispatched = client.post("/api/v1/refund-requests/rr-webhook/execute")
+    assert dispatched.json()["status"] == "REFUND_PROCESSING"
+    assert app.state.repository.refund_ledger("payment-1")[0]["status"] == "processing"
+
+    raw = json.dumps({
+        "event": "refund.processed",
+        "payload": {"refund": {"entity": {"id": dispatched.json()["gateway_refund_id"]}}},
+    }).encode()
+    signature = hmac.new(b"test-webhook-secret", raw, hashlib.sha256).hexdigest()
+    headers = {"X-Razorpay-Signature": signature, "Content-Type": "application/json"}
+    first = client.post("/api/v1/webhooks/razorpay", content=raw, headers=headers)
+    second = client.post("/api/v1/webhooks/razorpay", content=raw, headers=headers)
+    assert first.json() == {
+        "accepted": True, "duplicate": False, "event_type": "refund.processed",
+        "matched": True, "refund_status": "REFUNDED",
+    }
+    assert second.json()["duplicate"] is True
+    assert app.state.repository.execution("rr-webhook")["status"] == "REFUNDED"
+    assert app.state.repository.refund_ledger("payment-1")[0]["status"] == "succeeded"
+    assert len(gateway.effects) == 1

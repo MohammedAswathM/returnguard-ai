@@ -15,6 +15,7 @@ slice_path = Path("slice_results.json")
 correction_path = Path("results.metric_integrity.v1.1.json")
 case_audit_path = Path("evidence/v1_case_audit.csv")
 transition_path = Path("evidence/v1_policy_transitions.csv")
+razorpay_closure_path = Path("evidence/razorpay_test_closure.json")
 bundle_manifest_path = Path("artifacts/model_bundle/manifest.json")
 manifest = {
     "schema_version": "1.0",
@@ -35,8 +36,12 @@ manifest = {
         file_sha256(transition_path) if transition_path.is_file() else None
     ),
     "certified_incremental_monetary_result": False,
-    "genuine_razorpay_test_refund": False,
-    "external_actions": ["Razorpay test-mode closure requires merchant credentials and a captured test payment."],
+    "genuine_razorpay_test_refund": True,
+    "razorpay_test_closure_status": "SUCCESS",
+    "razorpay_test_closure_evidence_sha256": (
+        file_sha256(razorpay_closure_path) if razorpay_closure_path.is_file() else None
+    ),
+    "external_actions": [],
 }
 Path("submission_manifest.json").write_text(
     json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"

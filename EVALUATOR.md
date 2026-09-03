@@ -28,6 +28,6 @@
 
 ## Evidence boundary
 
-UCI Online Retail II supplies transaction distributions. Refund operations, evidence, abuse labels, costs, and outcomes are simulated. Results are held-out benchmark evidence, not production validation. Genuine Razorpay test closure remains an external action.
+UCI Online Retail II supplies transaction distributions. Refund operations, evidence, abuse labels, costs, and outcomes are simulated. Results are held-out benchmark evidence, not production validation. Genuine Razorpay test-mode closure used one bounded ₹1 refund, signed raw-body webhook confirmation, and an idempotent execute replay. The identifier-free evidence record is separate from model evidence.
 
 V1 cannot reconstruct point-in-time refundable balance. Its previous monetary headline is withdrawn; the evaluator should use the correction artifact for customer-impact definitions and frozen subgroup evidence.

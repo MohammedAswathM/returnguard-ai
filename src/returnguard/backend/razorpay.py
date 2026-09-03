@@ -15,11 +15,13 @@ from returnguard.domain.schemas import PaymentSnapshot
 class RazorpayTestGateway:
     provider_name = "RAZORPAY_TEST_MODE"
     authoritative_balance = True
+    requires_webhook_confirmation = True
 
     def __init__(
         self, key_id: str, key_secret: str, payment_id: str,
         client: httpx.Client | None = None,
         merchant_id: str = "configured-test-merchant",
+        payment_alias: str = "configured-test-payment",
     ) -> None:
         if not key_id.startswith("rzp_test_"):
             raise ValueError("only Razorpay test keys are accepted")
@@ -27,6 +29,7 @@ class RazorpayTestGateway:
             raise ValueError("test key secret and captured test payment are required")
         self.payment_id = payment_id
         self.merchant_id = merchant_id
+        self.payment_alias = payment_alias
         self.client = client or httpx.Client(
             base_url="https://api.razorpay.com", auth=(key_id, key_secret), timeout=15.0
         )
@@ -35,7 +38,7 @@ class RazorpayTestGateway:
         self, merchant_id: str, payment_id: str, order_id: str,
         currency: str, as_of: datetime,
     ) -> PaymentSnapshot:
-        if merchant_id != self.merchant_id or payment_id != self.payment_id:
+        if merchant_id != self.merchant_id or payment_id != self.payment_alias:
             raise RuntimeError("configured test payment does not belong to request scope")
         response = self.client.get(f"/v1/payments/{self.payment_id}")
         response.raise_for_status()
@@ -51,7 +54,7 @@ class RazorpayTestGateway:
         return PaymentSnapshot(
             merchant_id=merchant_id,
             payment_id=payment_id,
-            razorpay_payment_id=self.payment_id,
+            razorpay_payment_id=None,
             order_id=order_id,
             currency=payment_currency,
             captured_amount_paise=paid,
@@ -90,7 +93,7 @@ class RazorpayTestGateway:
         return RefundResult(
             refund_id=refund_id, status=str(payload.get("status", "unknown")),
             metadata={
-                "adapter": self.provider_name, "payment_id": self.payment_id,
+                "adapter": self.provider_name, "payment_reference": self.payment_alias,
                 "amount_paise": int(payload.get("amount", amount_paise)),
                 "status": str(payload.get("status", "unknown")),
             },

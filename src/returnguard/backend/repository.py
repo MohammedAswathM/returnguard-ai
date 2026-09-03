@@ -296,6 +296,22 @@ class SQLiteRepository:
                 self.connection.rollback()
                 raise
 
+    def attach_gateway_refund(self, refund_id: str, gateway_refund_id: str) -> None:
+        with self._transaction_lock, self.connection:
+            updated = self.connection.execute(
+                """UPDATE refund_ledger SET razorpay_refund_id = ?
+                WHERE refund_id = ? AND status = 'processing' AND razorpay_refund_id IS NULL""",
+                (gateway_refund_id, refund_id),
+            )
+            if updated.rowcount != 1:
+                raise sqlite3.IntegrityError("processing refund cannot be linked to gateway")
+
+    def refund_by_gateway_id(self, gateway_refund_id: str) -> dict[str, Any] | None:
+        row = self.connection.execute(
+            "SELECT * FROM refund_ledger WHERE razorpay_refund_id = ?", (gateway_refund_id,)
+        ).fetchone()
+        return dict(row) if row else None
+
     def release_refund(self, refund_id: str, processed_at: str) -> None:
         with self._transaction_lock, self.connection:
             self.connection.execute(
@@ -403,6 +419,13 @@ class SQLiteRepository:
                 """INSERT INTO executions VALUES
                 (:refund_request_id, :idempotency_key, :gateway_refund_id, :status,
                  :response_json, :created_at, :updated_at)""", values,
+            )
+
+    def update_execution_status(self, request_id: str, status: str, updated_at: str) -> None:
+        with self.connection:
+            self.connection.execute(
+                "UPDATE executions SET status = ?, updated_at = ? WHERE refund_request_id = ?",
+                (status, updated_at, request_id),
             )
 
     def add_audit(self, values: dict[str, Any]) -> None:

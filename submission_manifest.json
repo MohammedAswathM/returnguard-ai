@@ -1,9 +1,9 @@
 {
-  "external_actions": [
-    "Razorpay test-mode closure requires merchant credentials and a captured test payment."
-  ],
+  "external_actions": [],
   "certified_incremental_monetary_result": false,
-  "genuine_razorpay_test_refund": false,
+  "genuine_razorpay_test_refund": true,
+  "razorpay_test_closure_evidence_sha256": "90ed93e63005e307a3ff72599674fa84663ef8d8a632a10e96d6029376ae4858",
+  "razorpay_test_closure_status": "SUCCESS",
   "metric_integrity_correction_sha256": "2621ed5ac2266ccde8dc081e7f605d9e4712ad2e0dc5062fecbffb1bc817ba2f",
   "model_bundle_manifest_sha256": "3610fe307f8c7411f82da88c88325e9c47c724cf3e519e6844ade399281f71da",
   "project": "ReturnGuard",

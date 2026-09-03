@@ -117,7 +117,9 @@ All 55 over-captured cases were simulated positives and all crossed the classifi
 
 The adapter accepts only `rzp_test_` keys from environment variables, verifies a captured payment and refundable balance, sends integer paise, uses `X-Refund-Idempotency`, sanitizes stored metadata, verifies webhook HMAC-SHA256 over the raw body, and deduplicates webhook events.
 
-No genuine Razorpay test refund was executed in this repository run because credentials and a captured test payment were unavailable. See `docs/external_action_checklist.json`. Mock success is never presented as Razorpay API success.
+`python scripts/run_api.py` loads the ignored local `.env` without overriding variables already supplied by the process. It never prints environment values.
+
+Genuine Razorpay test-mode closure succeeded with one bounded ₹1 partial refund. The reservation remained `REFUND_PROCESSING` until raw-body signature validation received `refund.processed`, then finalized as `REFUNDED`. Replaying the identical execute request returned the same effect; authoritative refund count and refunded amount increased exactly once. The published evidence contains no credentials, identifiers, signatures, or payloads. See `docs/external_action_checklist.json` and `evidence/razorpay_test_closure.json`.
 
 ## Reproducibility
 
