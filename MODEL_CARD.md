@@ -4,6 +4,8 @@
 
 ReturnGuard v2 estimates a simulated serial false-claim probability only after deterministic payment-integrity checks pass. It does not establish guilt, reject customers autonomously, or replace operator judgment.
 
+V2 is the primary clean offline benchmark. The interactive API retains the validated v1 operational demonstration bundle because the existing request path does not construct the full v2 point-in-time feature contract. Genuine Razorpay evidence validates the execution layer, not v2 online serving.
+
 Thirty-two bounded LightGBM trials used three rolling-origin folds within train. Mean temporal AP was 0.1572 for rules, 0.1573 for Logistic Regression, 0.1610 for default LightGBM, and 0.1720 for the selected regularized LightGBM. Selection used the preregistered stability/capacity-penalized objective. No final labels participated.
 
 Sigmoid calibration beat isotonic on the calibration selection half by Brier (0.08465 versus 0.08509) and log loss (0.31039 versus 0.34492), then was refit on the full calibration period. Policy thresholds were selected on policy-selection only.

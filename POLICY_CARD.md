@@ -2,6 +2,8 @@
 
 ## Frozen v2 contract
 
+This contract is evaluated offline. The interactive API retains the v1 operational demonstration bundle; the completed genuine Razorpay Test Mode refund validates execution controls rather than v2 online deployment.
+
 Policy selection used only the 1,200-case policy-selection period. Constraints are at most 5% manual review, at most one verification, at most 20% initial legitimate challenge during selection, and no autonomous rejection. The selected development policy produced 48.33 reviews per 1,000 and 18.98% initial legitimate challenge.
 
 Likelihood ratios use train plus calibration counts with Laplace smoothing: consistent `0.2199`, inconsistent `17.7014`, evidence-inconclusive `1.1916`, verifier-unavailable `1.0`, and verifier-timeout `1.0`. Technical failure cannot raise risk. Initial and posterior decisions remain separate.

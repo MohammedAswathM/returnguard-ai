@@ -197,7 +197,10 @@ readme = Path("README.md").read_text(encoding="utf-8")
 required_claims = (
     "2,400", "10.00%", "0.1400", "15.38%", "2.50%", "1.53%",
     "6 TP", "33 FP", "2,127 TN", "234 FN", "simulated abuse labels",
-    "not production-performance evidence", "MOCK_RAZORPAY_TEST_ADAPTER", "12.68%", "91.30%",
+    "25.00%", "24.91%", "69.86%", "5.09%", "45.83 per 1,000",
+    "primary clean offline ML benchmark", "v1 operational demonstration bundle",
+    "not v2 online deployment", "not production-performance evidence",
+    "MOCK_RAZORPAY_TEST_ADAPTER", "12.68%", "91.30%",
     "terminal legitimate intervention rate", "withdrawn", "0.1495", "0.1361",
 )
 missing_claims = [claim for claim in required_claims if claim not in readme]

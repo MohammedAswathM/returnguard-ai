@@ -1,5 +1,7 @@
 # Architecture
 
+The frozen submission separates evidence from serving: v2 is the primary offline ML benchmark, while the interactive API and golden workflows retain the validated v1 operational demonstration bundle. Genuine Razorpay Test Mode evidence validates the shared payment-integrity and exactly-once execution layer; it is not evidence that v2 is deployed online.
+
 ## Decision path
 
 ```text
@@ -23,6 +25,8 @@ Payment existence, ownership, captured status, currency, positive integer-paise 
 Lane A is a 200-case deterministic invariant suite and is excluded from ML metrics. Lane B contains 12,000 technically valid ambiguous claims partitioned chronologically into train, calibration, policy selection, and locked final. Simulated labels represent noisy behavioral combinations, not payment invalidity.
 
 The v2 feature engine lives under `src/returnguard/v2/` and applies compute-before-update, strict event cutoffs, mature-outcome admission, neutral cold-start defaults, and unseen-category handling. Payment balances and invalidity outputs are forbidden model inputs.
+
+V2 is not packaged in the v1 serving-bundle format, and the current API does not construct all nineteen v2 historical/contextual features. Defaulting those unavailable features would violate train/serve parity, so the serving bundle is not switched during submission freeze.
 
 ## Model and policy ownership
 

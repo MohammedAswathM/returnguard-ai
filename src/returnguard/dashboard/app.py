@@ -308,7 +308,10 @@ def demo() -> None:
 def main() -> None:
     st.set_page_config(page_title="ReturnGuard", layout="wide")
     st.title("ReturnGuard")
-    st.caption("Evidence-adaptive refund verification")
+    st.caption(
+        "Evidence panels: frozen v2 offline benchmark | Golden workflows: v1 operational "
+        "demonstration bundle | Razorpay evidence: execution-layer validation"
+    )
     results = load_results()
     correction = load_correction()
     page = st.sidebar.radio(

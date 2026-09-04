@@ -155,3 +155,12 @@ to sorted timestamp bisection and per-customer maturity heaps without changing c
 - Phase 3 API integration passed 8 tests; Phase 4 API and Razorpay integration passed 11 tests without making another genuine refund.
 - A fresh public repository copy excluding ignored files installed successfully into a new virtual environment. Its repository-only gate passed 65 tests, Ruff, strict mypy, secret scanning, and artifact-independent preflight.
 - Confirmed `.env`, raw data, local environments, caches, and private development context were absent from the fresh public copy.
+
+## 2026-09-04 - Submission Freeze
+
+- Retained the v1 operational demonstration bundle after confirming that v2 cannot be wired into the current API without a serving-feature migration. The v2 model expects nineteen point-in-time features and is not packaged in the validated v1 serving-bundle contract; silently defaulting unavailable history/context would violate golden parity.
+- Kept v2 as the primary clean offline ML benchmark and made the version boundary explicit in the README, architecture, model/policy cards, evaluator guide, and dashboard.
+- Clarified that the completed genuine Razorpay Test Mode evidence validates the shared integrity, reservation, webhook, and exactly-once execution layer rather than v2 online deployment.
+- Removed the ignored local demo guide from public test dependencies; it is not required by preflight or the submission manifest.
+- Final verification: 65 tests passed with three known SHAP dependency warnings; Ruff passed; strict mypy passed across 62 source files; phase 3 passed 8 tests; phase 4 passed 11 tests; full preflight and secret scan passed across 182 files.
+- No benchmark generation, training, calibration, policy selection, final evaluation, or genuine refund execution occurred during this freeze pass.

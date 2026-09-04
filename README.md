@@ -2,6 +2,8 @@
 
 ReturnGuard separates deterministic payment validity from probabilistic return-abuse risk, then uses one structured evidence check to rescue legitimate customers before a bounded refund action.
 
+The submission has two deliberately separate frozen surfaces. **V2 is the primary clean offline ML benchmark**; the interactive API and golden workflows use the previously validated **v1 operational demonstration bundle**. The completed genuine Razorpay Test Mode refund validates the human-gated, webhook-confirmed execution layer, not v2 online deployment.
+
 ## Legitimate-customer rescue
 
 In the locked v2 benchmark, 365 of 2,160 legitimate claims were initially challenged. Consistent evidence restored auto-approval for 255: an **11.81% legitimate rescue rate** and **69.86% challenged-legitimate rescue rate**. The remaining **5.09% terminal legitimate intervention rate** is customer friction, not elapsed delay. No workflow-latency metric is claimed.
@@ -23,7 +25,7 @@ refund request
   -> append-only SQLite audit
 ```
 
-Training, replay, and evaluation use the same ordered point-in-time feature engine. Histories exclude the current request, admit only matured outcomes, apply neutral cold-start priors, and exclude payment-invalid reason codes and balance-ratio shortcuts.
+Within the v2 offline benchmark, training, replay, and evaluation use the same ordered point-in-time feature engine. Histories exclude the current request, admit only matured outcomes, apply neutral cold-start priors, and exclude payment-invalid reason codes and balance-ratio shortcuts. Migrating that feature contract into the operational API is intentionally outside this frozen submission.
 
 ## Locked v2 evidence
 

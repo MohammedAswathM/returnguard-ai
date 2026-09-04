@@ -74,7 +74,7 @@ def test_original_locks_and_subgroups_are_bound() -> None:
 def test_public_reporting_uses_correction_terminology() -> None:
     public = "\n".join(
         Path(path).read_text(encoding="utf-8")
-        for path in ("README.md", "MODEL_CARD.md", "docs/DEMO_SCRIPT.md", "POLICY_CARD.md")
+        for path in ("README.md", "MODEL_CARD.md", "POLICY_CARD.md")
     )
     assert "Initial legitimate challenge rate" in public
     assert "Challenged-legitimate rescue rate" in public
