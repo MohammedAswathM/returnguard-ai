@@ -1,0 +1,14 @@
+schema_version: "2.0"
+model_version: "returnguard-v2-lgbm-1"
+random_seed: 20260903
+model_candidates: [rules, logistic_regression, lightgbm_default, lightgbm_tuned]
+lightgbm_trials: 32
+rolling_origin_folds: 3
+instability_penalty: 0.10
+review_capacity_penalty: 1.00
+max_review_rate: 0.05
+calibration_methods: [sigmoid, isotonic]
+calibration_selection: "lowest Brier score; log loss tie-break; calibration data only"
+ensemble_selection: "disabled unless mean temporal AP improves by at least 0.01 and all folds do not regress"
+bootstrap_resamples: 1000
+output_dir: artifacts/v2/training

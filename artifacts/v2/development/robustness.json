@@ -1,0 +1,215 @@
+{
+  "feature_group_ablations": {
+    "claim_integrity_evidence": {
+      "policy_selection_average_precision": 0.11663586189304642,
+      "removed_features": [
+        "evidence_provided",
+        "reason_history_inconsistency",
+        "returnless_requested"
+      ]
+    },
+    "claim_order_context": {
+      "policy_selection_average_precision": 0.14929723549019017,
+      "removed_features": [
+        "account_tenure_days",
+        "category",
+        "hours_delivery_to_request",
+        "reason_code",
+        "requested_amount_paise",
+        "requested_quantity_ratio"
+      ]
+    },
+    "customer_peer_deviation": {
+      "policy_selection_average_precision": 0.1397313902790176,
+      "removed_features": [
+        "customer_peer_refund_deviation"
+      ]
+    },
+    "missingness_indicators": {
+      "policy_selection_average_precision": 0.14496483758758608,
+      "removed_features": [
+        "cold_start_indicator",
+        "missing_evidence_indicator"
+      ]
+    },
+    "product_category_defect_context": {
+      "policy_selection_average_precision": 0.14041834868062172,
+      "removed_features": [
+        "category_matured_defect_rate"
+      ]
+    },
+    "smoothed_customer_history": {
+      "policy_selection_average_precision": 0.13607533627276502,
+      "removed_features": [
+        "prior_matured_adverse_rate",
+        "prior_order_count",
+        "smoothed_refund_rate_90d"
+      ]
+    },
+    "supporting_entity_context": {
+      "policy_selection_average_precision": 0.13709118345897178,
+      "removed_features": [
+        "connected_matured_adverse_rate",
+        "prior_connected_claim_count"
+      ]
+    },
+    "time_decayed_refund_velocity": {
+      "policy_selection_average_precision": 0.14167320226046173,
+      "removed_features": [
+        "decayed_refund_velocity_30d"
+      ]
+    }
+  },
+  "hard_legitimate_slices": {
+    "cold_start_customer": {
+      "prevalence": 0.0,
+      "support": 34,
+      "underpowered": true
+    },
+    "cold_start_indicator": {
+      "brier_score": 0.07655755063489875,
+      "prevalence": 0.08360128617363344,
+      "raw_average_precision": 0.14122610241317568,
+      "support": 311
+    },
+    "first_time_refund": {
+      "prevalence": 0.0,
+      "support": 34,
+      "underpowered": true
+    },
+    "genuine_product_defect_burst": {
+      "prevalence": 0.0,
+      "support": 35,
+      "underpowered": true
+    },
+    "high_value_loyal_customer": {
+      "prevalence": 0.0,
+      "support": 35,
+      "underpowered": true
+    },
+    "missing_evidence": {
+      "prevalence": 0.0,
+      "support": 34,
+      "underpowered": true
+    },
+    "unusual_legitimate_purchase": {
+      "prevalence": 0.0,
+      "support": 34,
+      "underpowered": true
+    },
+    "verifier_unavailable": {
+      "prevalence": 0.0,
+      "support": 34,
+      "underpowered": true
+    }
+  },
+  "schema_version": "2.0",
+  "scope": "synthetic development stress tests; not held-out evidence",
+  "seed_method": "customer-cluster resampling of policy-selection cases using preregistered non-final robustness seeds",
+  "seed_results": [
+    {
+      "brier_score": 0.09726882326935722,
+      "prevalence": 0.10920945395273024,
+      "raw_average_precision": 0.12567865269664627,
+      "seed": 20260904,
+      "support": 1227
+    },
+    {
+      "brier_score": 0.0881954030983601,
+      "prevalence": 0.09797570850202429,
+      "raw_average_precision": 0.1431667921894303,
+      "seed": 20260905,
+      "support": 1235
+    },
+    {
+      "brier_score": 0.08474048865855692,
+      "prevalence": 0.0936426116838488,
+      "raw_average_precision": 0.1284542671126604,
+      "seed": 20260906,
+      "support": 1164
+    },
+    {
+      "brier_score": 0.09413718242107755,
+      "prevalence": 0.10548523206751055,
+      "raw_average_precision": 0.1501897902303535,
+      "seed": 20260907,
+      "support": 1185
+    },
+    {
+      "brier_score": 0.10095620888809302,
+      "prevalence": 0.11418685121107267,
+      "raw_average_precision": 0.18581885703444084,
+      "seed": 20260908,
+      "support": 1156
+    }
+  ],
+  "seed_summary": {
+    "mean_average_precision": 0.14666167185270623,
+    "standard_deviation_average_precision": 0.021585845523284703,
+    "worst_seed_average_precision": 0.12567865269664627
+  },
+  "stress_tests": {
+    "amount_outliers_top_1_percent": {
+      "brier_score": 0.07642044459992293,
+      "prevalence": 0.08333333333333333,
+      "raw_average_precision": 0.25,
+      "support": 12
+    },
+    "duplicate_request_prediction_parity": {
+      "maximum_probability_difference": 0.0,
+      "support": 100
+    },
+    "label_noise_10pct": {
+      "prevalence": 0.17333333333333334,
+      "raw_average_precision": 0.18548473802141446,
+      "support": 1200
+    },
+    "label_noise_5pct": {
+      "prevalence": 0.13666666666666666,
+      "raw_average_precision": 0.15887437045201988,
+      "support": 1200
+    },
+    "missing_claim_integrity": {
+      "brier_score": 0.08993795834782607,
+      "prevalence": 0.1,
+      "raw_average_precision": 0.12128225712125984,
+      "support": 1200
+    },
+    "missing_customer_history": {
+      "brier_score": 0.08977384003079326,
+      "prevalence": 0.1,
+      "raw_average_precision": 0.14073811647819184,
+      "support": 1200
+    },
+    "prevalence_15pct": {
+      "brier_score": 0.12957782309446628,
+      "prevalence": 0.15,
+      "raw_average_precision": 0.222085940537132,
+      "support": 1200
+    },
+    "prevalence_2pct": {
+      "brier_score": 0.026056054265168948,
+      "prevalence": 0.02,
+      "raw_average_precision": 0.025628150770006332,
+      "support": 1200
+    },
+    "prevalence_5pct": {
+      "brier_score": 0.04993115343276681,
+      "prevalence": 0.05,
+      "raw_average_precision": 0.06958184547252538,
+      "support": 1200
+    },
+    "prevalence_9pct": {
+      "brier_score": 0.08186667644770186,
+      "prevalence": 0.09,
+      "raw_average_precision": 0.11190503601801961,
+      "support": 1200
+    },
+    "unseen_category": {
+      "brier_score": 0.08985139237531568,
+      "prevalence": 0.1,
+      "raw_average_precision": 0.13846169647469245,
+      "support": 1200
+    }
+  }
+}

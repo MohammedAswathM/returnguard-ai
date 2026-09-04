@@ -1,0 +1,156 @@
+{
+  "feature_diagnostics": [
+    {
+      "decision_stump_average_precision": 0.09831436077057794,
+      "feature": "account_tenure_days",
+      "mutual_information": 0.0010609190240999933,
+      "single_feature_average_precision": 0.11147978241064985,
+      "single_feature_roc_auc": 0.5344058641975309
+    },
+    {
+      "decision_stump_average_precision": 0.10635021097046414,
+      "feature": "requested_amount_paise",
+      "mutual_information": 0.0017008970958951597,
+      "single_feature_average_precision": 0.1067579435194878,
+      "single_feature_roc_auc": 0.521304012345679
+    },
+    {
+      "decision_stump_average_precision": 0.10125000000000002,
+      "feature": "requested_quantity_ratio",
+      "mutual_information": 0.0,
+      "single_feature_average_precision": 0.11207535732027625,
+      "single_feature_roc_auc": 0.5152662037037037
+    },
+    {
+      "decision_stump_average_precision": 0.09934497816593886,
+      "feature": "hours_delivery_to_request",
+      "mutual_information": 0.004938291460662603,
+      "single_feature_average_precision": 0.10843140791642589,
+      "single_feature_roc_auc": 0.5041512345679012
+    },
+    {
+      "decision_stump_average_precision": 0.09876847290640395,
+      "feature": "reason_code",
+      "mutual_information": 0.00033471849701171424,
+      "single_feature_average_precision": 0.09449674472014125,
+      "single_feature_roc_auc": 0.4734529320987655
+    },
+    {
+      "decision_stump_average_precision": 0.10067137809187278,
+      "feature": "category",
+      "mutual_information": 0.0251249052674247,
+      "single_feature_average_precision": 0.10913315355795142,
+      "single_feature_roc_auc": 0.5298341049382715
+    },
+    {
+      "decision_stump_average_precision": 0.0986607142857143,
+      "feature": "prior_order_count",
+      "mutual_information": 0.0007125794000364394,
+      "single_feature_average_precision": 0.12486292338814686,
+      "single_feature_roc_auc": 0.5262538580246914
+    },
+    {
+      "decision_stump_average_precision": 0.1,
+      "feature": "smoothed_refund_rate_90d",
+      "mutual_information": 0.0,
+      "single_feature_average_precision": 0.1030888770408094,
+      "single_feature_roc_auc": 0.505625
+    },
+    {
+      "decision_stump_average_precision": 0.0943992606284658,
+      "feature": "prior_matured_adverse_rate",
+      "mutual_information": 0.0,
+      "single_feature_average_precision": 0.1153390129553307,
+      "single_feature_roc_auc": 0.50875
+    },
+    {
+      "decision_stump_average_precision": 0.10548076923076924,
+      "feature": "decayed_refund_velocity_30d",
+      "mutual_information": 0.005022402704888629,
+      "single_feature_average_precision": 0.12726273566715754,
+      "single_feature_roc_auc": 0.5119367283950618
+    },
+    {
+      "decision_stump_average_precision": 0.09975062866722548,
+      "feature": "customer_peer_refund_deviation",
+      "mutual_information": 0.0009604880824085615,
+      "single_feature_average_precision": 0.10409327355853906,
+      "single_feature_roc_auc": 0.5269560185185185
+    },
+    {
+      "decision_stump_average_precision": 0.1022159090909091,
+      "feature": "category_matured_defect_rate",
+      "mutual_information": 0.009658630229567366,
+      "single_feature_average_precision": 0.1024522077778507,
+      "single_feature_roc_auc": 0.5201273148148148
+    },
+    {
+      "decision_stump_average_precision": 0.09966954022988507,
+      "feature": "reason_history_inconsistency",
+      "mutual_information": 0.0025613215912145826,
+      "single_feature_average_precision": 0.1043329154886877,
+      "single_feature_roc_auc": 0.5169907407407407
+    },
+    {
+      "decision_stump_average_precision": 0.11307692307692307,
+      "feature": "evidence_provided",
+      "mutual_information": 0.0028128800292959166,
+      "single_feature_average_precision": 0.11307692307692307,
+      "single_feature_roc_auc": 0.5555555555555556
+    },
+    {
+      "decision_stump_average_precision": 0.11037735849056604,
+      "feature": "returnless_requested",
+      "mutual_information": 0.012886566252074294,
+      "single_feature_average_precision": 0.11037735849056604,
+      "single_feature_roc_auc": 0.5407407407407407
+    },
+    {
+      "decision_stump_average_precision": 0.11105263157894738,
+      "feature": "prior_connected_claim_count",
+      "mutual_information": 0.0,
+      "single_feature_average_precision": 0.12174725762637176,
+      "single_feature_roc_auc": 0.5227816358024691
+    },
+    {
+      "decision_stump_average_precision": 0.09331468218442256,
+      "feature": "connected_matured_adverse_rate",
+      "mutual_information": 0.0006223325253418288,
+      "single_feature_average_precision": 0.11721401194036433,
+      "single_feature_roc_auc": 0.5075038580246914
+    },
+    {
+      "decision_stump_average_precision": 0.11307692307692307,
+      "feature": "missing_evidence_indicator",
+      "mutual_information": 0.0020313784189900375,
+      "single_feature_average_precision": 0.11307692307692307,
+      "single_feature_roc_auc": 0.5555555555555556
+    },
+    {
+      "decision_stump_average_precision": 0.09644694533762058,
+      "feature": "cold_start_indicator",
+      "mutual_information": 0.000457315948679593,
+      "single_feature_average_precision": 0.10449381327334083,
+      "single_feature_roc_auc": 0.523611111111111
+    }
+  ],
+  "max_decision_stump_average_precision": 0.11307692307692307,
+  "max_single_feature_average_precision": 0.12726273566715754,
+  "passed": true,
+  "permuted_label_average_precision_mean": 0.1029451058350005,
+  "permuted_label_average_precision_runs": [
+    0.09903448460955006,
+    0.0995628849466145,
+    0.10177904711184194,
+    0.09481844461602673,
+    0.11953066789096922
+  ],
+  "policy_selection_prevalence": 0.1,
+  "schema_version": "2.0",
+  "scope": "development partitions only",
+  "thresholds": {
+    "max_decision_stump_average_precision": 0.8,
+    "max_single_feature_average_precision": 0.8,
+    "permutation_excess_over_prevalence": 0.05
+  }
+}

@@ -132,3 +132,26 @@ to sorted timestamp bisection and per-customer maturity heaps without changing c
 - Executed one bounded 100-paise test-mode refund after fresh authoritative payment checks.
 - Observed signed `refund.created` and `refund.processed` events through the external HTTPS tunnel; `refund.processed` finalized the reservation.
 - Replayed the identical execute request and confirmed the same effect, one authoritative refund-count increase, and an exact 100-paise refunded-amount increase.
+
+## 2026-09-03 - Benchmark V2 Two-Lane Redesign
+
+- Preregistered the v2 generator, splits, feature allowlist, forbidden fields, temporal model search, calibration rule, policy constraints, bootstrap protocol, and final-opening conditions before data generation.
+- Generated 12,000 technically valid ambiguous ML claims from the official UCI transaction foundation and a separate 200-case deterministic payment-integrity suite.
+- Enforced explicit simulated payment snapshots and prior-refund ledger entries, chronological `7,200/1,200/1,200/2,400` splits, compute-before-update, matured outcomes, and a sealed final truth.
+- Passed the development shortcut audit: maximum single-feature AP 0.1273, maximum stump AP 0.1131, and permuted-label AP 0.1029 at 10% prevalence.
+- Compared rules, Logistic Regression, default LightGBM, and 32 bounded LightGBM trials on three rolling-origin train folds. Selected regularized LightGBM by the preregistered penalized objective.
+- Selected sigmoid calibration using calibration data only. Froze verifier likelihoods with technical unavailability and timeout fixed at LR 1.0.
+- Selected the adaptive policy on policy-selection only at 48.33 reviews per 1,000 and 18.98% initial legitimate challenge.
+- Ran five complete non-final generator seeds; mean development raw AP was 0.1495, standard deviation 0.0088, and worst seed 0.1361. All replay final partitions remained sealed.
+- Passed 63 tests, Ruff, strict mypy, and preflight before freezing. Preregistration SHA-256 is `f58e5ee470832c8819aea6ceb81106794c7b0558b86029f2d7667ba59e347a8e`; freeze SHA-256 is `4038c6d22fd5eb8dc7dffb982e5b6d12823fe96e3d6e499dedb8f1f54b95b30a`.
+- Opened v2 final once. Support is 2,400 at 10% simulated prevalence; raw AP 0.1400, Brier 0.0897, and adaptive abuse-case intervention recall 25.00%.
+- Preserved the original v2 result lock after identifying a reporting defect in bootstrap score scale and policy-cost attribution. Published a separate `v2.0.1` correction; no model, probability, threshold, likelihood, action, label, or cost assumption changed.
+- Kept all historical v1 artifacts and the completed genuine Razorpay Test Mode closure evidence byte-identical.
+
+### Final gate evidence
+
+- Main worktree: 65 tests passed with three known SHAP dependency warnings; Ruff passed; strict mypy passed across 62 source files.
+- Full preflight passed with the v2 lock, correction, freeze, public evidence, v1 provenance, and genuine Razorpay closure hashes validated.
+- Phase 3 API integration passed 8 tests; Phase 4 API and Razorpay integration passed 11 tests without making another genuine refund.
+- A fresh public repository copy excluding ignored files installed successfully into a new virtual environment. Its repository-only gate passed 65 tests, Ruff, strict mypy, secret scanning, and artifact-independent preflight.
+- Confirmed `.env`, raw data, local environments, caches, and private development context were absent from the fresh public copy.

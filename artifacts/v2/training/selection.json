@@ -1,0 +1,250 @@
+{
+  "calibration": {
+    "calibrated_brier_score": 0.08974486669731374,
+    "calibrated_log_loss": 0.32368814934805584,
+    "candidate_metrics": {
+      "isotonic": {
+        "brier_score": 0.0850934307523483,
+        "log_loss": 0.3449186117331675
+      },
+      "sigmoid": {
+        "brier_score": 0.08465354340011552,
+        "log_loss": 0.31038777410138735
+      }
+    },
+    "raw_average_precision": 0.14371195148454108,
+    "reliability_bins": [
+      {
+        "bin": 0,
+        "lower": 0.0,
+        "mean_probability": 0.097810809613268,
+        "observed_prevalence": 0.07496977025392987,
+        "support": 827,
+        "upper": 0.1
+      },
+      {
+        "bin": 1,
+        "lower": 0.1,
+        "mean_probability": 0.10482923804883464,
+        "observed_prevalence": 0.1554959785522788,
+        "support": 373,
+        "upper": 0.2
+      },
+      {
+        "bin": 2,
+        "lower": 0.2,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.30000000000000004
+      },
+      {
+        "bin": 3,
+        "lower": 0.30000000000000004,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.4
+      },
+      {
+        "bin": 4,
+        "lower": 0.4,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.5
+      },
+      {
+        "bin": 5,
+        "lower": 0.5,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.6000000000000001
+      },
+      {
+        "bin": 6,
+        "lower": 0.6000000000000001,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.7000000000000001
+      },
+      {
+        "bin": 7,
+        "lower": 0.7000000000000001,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.8
+      },
+      {
+        "bin": 8,
+        "lower": 0.8,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.9
+      },
+      {
+        "bin": 9,
+        "lower": 0.9,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 1.0
+      }
+    ],
+    "selected": "sigmoid",
+    "selection_partition": "calibration"
+  },
+  "feature_schema_sha256": "2c480d4e662b0d113013de2d14e6615b5b4bcb7169fb76086679d711fff1fed1",
+  "rolling_origin_comparison": [
+    {
+      "fold": 0,
+      "lightgbm_default_average_precision": 0.1394650395432499,
+      "lightgbm_tuned_average_precision": 0.15408162219529406,
+      "logistic_average_precision": 0.16615337611029188,
+      "rules_average_precision": 0.1865699498206233
+    },
+    {
+      "fold": 1,
+      "lightgbm_default_average_precision": 0.1451101751981513,
+      "lightgbm_tuned_average_precision": 0.13448308608389295,
+      "logistic_average_precision": 0.13546978371803825,
+      "rules_average_precision": 0.12049679616327773
+    },
+    {
+      "fold": 2,
+      "lightgbm_default_average_precision": 0.19828231055656942,
+      "lightgbm_tuned_average_precision": 0.22755780793129063,
+      "logistic_average_precision": 0.17014492684214844,
+      "rules_average_precision": 0.16444892140560194
+    }
+  ],
+  "schema_version": "2.0",
+  "scope": "development data only",
+  "selected_best_iterations": [
+    13,
+    31,
+    14
+  ],
+  "selected_candidate": "lightgbm_tuned",
+  "selected_parameters": {
+    "colsample_bytree": 0.7148881834427089,
+    "learning_rate": 0.06049420644439792,
+    "max_depth": 4,
+    "min_child_samples": 146,
+    "min_split_gain": 0.13430529880957362,
+    "n_estimators": 601,
+    "num_leaves": 26,
+    "reg_alpha": 0.085041227135354,
+    "reg_lambda": 1.9317588218621071,
+    "subsample": 0.7529693261911579
+  },
+  "selected_trial": 12,
+  "selection_reason": "highest preregistered penalized rolling-origin objective",
+  "shap_concentration": {
+    "features": [
+      {
+        "feature": "reason_history_inconsistency",
+        "mean_absolute_shap": 0.19143753918949646,
+        "share": 0.3723682659803753
+      },
+      {
+        "feature": "category_matured_defect_rate",
+        "mean_absolute_shap": 0.08674017557147277,
+        "share": 0.16871972396391302
+      },
+      {
+        "feature": "cold_start_indicator",
+        "mean_absolute_shap": 0.05709467313332517,
+        "share": 0.1110557757970757
+      },
+      {
+        "feature": "decayed_refund_velocity_30d",
+        "mean_absolute_shap": 0.040378500891634715,
+        "share": 0.07854087773778703
+      },
+      {
+        "feature": "prior_matured_adverse_rate",
+        "mean_absolute_shap": 0.037167222777128216,
+        "share": 0.0722945685335308
+      },
+      {
+        "feature": "prior_connected_claim_count",
+        "mean_absolute_shap": 0.025652233652672492,
+        "share": 0.04989657621076011
+      },
+      {
+        "feature": "hours_delivery_to_request",
+        "mean_absolute_shap": 0.023427234918472532,
+        "share": 0.04556869504403423
+      },
+      {
+        "feature": "missing_evidence_indicator",
+        "mean_absolute_shap": 0.01748636342022994,
+        "share": 0.03401300942678929
+      },
+      {
+        "feature": "requested_amount_paise",
+        "mean_absolute_shap": 0.012968789843236862,
+        "share": 0.025225803707233267
+      },
+      {
+        "feature": "account_tenure_days",
+        "mean_absolute_shap": 0.007206914274885496,
+        "share": 0.01401828597969968
+      },
+      {
+        "feature": "requested_quantity_ratio",
+        "mean_absolute_shap": 0.005443442713204158,
+        "share": 0.010588128810373647
+      },
+      {
+        "feature": "category",
+        "mean_absolute_shap": 0.004673792536152144,
+        "share": 0.009091069753650921
+      },
+      {
+        "feature": "customer_peer_refund_deviation",
+        "mean_absolute_shap": 0.002220687082019909,
+        "share": 0.004319494502059202
+      },
+      {
+        "feature": "smoothed_refund_rate_90d",
+        "mean_absolute_shap": 0.0012578587054324238,
+        "share": 0.0024466813926528478
+      },
+      {
+        "feature": "evidence_provided",
+        "mean_absolute_shap": 0.0009526644856290069,
+        "share": 0.0018530431600649357
+      },
+      {
+        "feature": "reason_code",
+        "mean_absolute_shap": 0.0,
+        "share": 0.0
+      },
+      {
+        "feature": "prior_order_count",
+        "mean_absolute_shap": 0.0,
+        "share": 0.0
+      },
+      {
+        "feature": "returnless_requested",
+        "mean_absolute_shap": 0.0,
+        "share": 0.0
+      },
+      {
+        "feature": "connected_matured_adverse_rate",
+        "mean_absolute_shap": 0.0,
+        "share": 0.0
+      }
+    ],
+    "sample_support": 500,
+    "top_feature_share": 0.3723682659803753,
+    "top_three_share": 0.652143765741364
+  },
+  "training_feature_artifact_sha256": "2f524ee5590415b36a01f47a976ddc93c6d44ff3d4a98406d7c9e0c6c6817b06"
+}

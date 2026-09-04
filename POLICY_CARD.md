@@ -1,21 +1,21 @@
 # Policy Card
 
-## Operating contract
+## Frozen v2 contract
 
-The policy enumerates expected cost for auto-approve, one verification, return-first, and manual review using integer paise and declared loss, salvage, logistics, review, verification, friction, and delay assumptions. Selection used only the policy-selection period.
+Policy selection used only the 1,200-case policy-selection period. Constraints are at most 5% manual review, at most one verification, at most 20% initial legitimate challenge during selection, and no autonomous rejection. The selected development policy produced 48.33 reviews per 1,000 and 18.98% initial legitimate challenge.
 
-Frozen constraints are at most 5% manual review, at most one customer verification, at most 20% initial legitimate challenge during selection, and no autonomous adverse decision. Isotonic probability ties at the review boundary use a frozen refund-amount tie-breaker to respect capacity.
+Likelihood ratios use train plus calibration counts with Laplace smoothing: consistent `0.2199`, inconsistent `17.7014`, evidence-inconclusive `1.1916`, verifier-unavailable `1.0`, and verifier-timeout `1.0`. Technical failure cannot raise risk. Initial and posterior decisions remain separate.
 
-## Verifier update
+## Locked outcomes
 
-The single order-integrity verifier checks payment/order match, captured status, refundable balance, quantity eligibility, delivery/reason compatibility, and allowlisted demo evidence. Missing data or verifier failure is inconclusive, not inconsistent.
+On v2 final, adaptive verification produced 45.83 reviews per 1,000, 25.00% simulated abuse-case intervention recall, and 24.91% simulated abuse-amount intervention recall. It challenged 365 of 2,160 legitimate cases, rescued 255, and left 110 with a terminal intervention. Sixteen legitimate cases received return-first.
 
-Likelihood ratios use train and calibration support with Laplace smoothing. Consistent evidence has LR below one, inconsistent evidence LR above one, inconclusive evidence remains close to one, and expired evidence is neutral. The initial decision remains immutable; posterior risk is a separate record.
+## Policy comparison
 
-## Locked evidence
+Corrected simulated costs are INR 7,828,077.72 approve-all, INR 3,405,216.85 return-first-all, INR 7,622,836.75 fixed bands, and INR 6,559,069.27 adaptive verification. Return-first-all is cheapest under these assumptions but imposes returns on all 2,160 legitimate cases. Adaptive verification is justified by customer rescue and bounded return burden, not unconditional economic superiority.
 
-The final policy produced 48.125 reviews per 1,000 and 90.12% simulated abuse-amount intervention recall. It initially challenged 184 of 1,451 legitimate cases (12.68%), rescued 168 (91.30% of those challenged), and left 16 with a terminal intervention (1.10% of legitimate cases).
+The original v2 lock charged verification cost too broadly and omitted unsalvaged value for abusive return-first cases. The versioned correction changes reporting arithmetic only; all model probabilities, thresholds, likelihoods, and actions remain frozen.
 
-The original v1 monetary estimate is withdrawn because v1 lacks point-in-time prior-refund state and included submitted amounts above original captured payment. No certified gateway-executable or incremental monetary result is claimed. Fixed return-first bands had slightly lower modeled simulation cost; adaptive verification's observed advantage is customer rescue and reduced return-first burden.
+## Safety boundary
 
-Adaptive verification materially outperformed score-to-review on policy-selection cost. Fixed return-first bands were slightly cheaper than adaptive verification, so the adaptive strategy is justified by rescue and lower friction rather than an unconditional cost win.
+The verifier checks structured facts but cannot approve, reject, or call the gateway. Missing evidence is `EVIDENCE_INCONCLUSIVE`; infrastructure failure is `VERIFIER_UNAVAILABLE` or `VERIFIER_TIMEOUT`. High-risk and inconsistent cases require a named human, and payment execution remains subject to fresh authoritative balance checks and atomic reservation.

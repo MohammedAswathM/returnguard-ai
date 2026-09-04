@@ -1,25 +1,32 @@
 # Data Card
 
-## Foundation
+## Foundation and provenance
 
-The benchmark uses UCI Online Retail II under CC BY 4.0. The validated archive contains 1,067,371 transaction rows from December 2009 through December 2011. Archive SHA-256 is `572e36277c2390fbfde10664750731e0a86f55e33470d91919085f0408e67bfb`.
+V2 uses UCI Online Retail II under CC BY 4.0. The archive contains 1,067,371 rows and has SHA-256 `572e36277c2390fbfde10664750731e0a86f55e33470d91919085f0408e67bfb`. UCI supplies invoice, product, quantity, price, customer, country, and timestamp distributions. Cancellations remain transaction events and are never abuse labels.
 
-UCI fields provide invoices, products, quantities, prices, customers, countries, and timestamps. Derived fields include baskets, order values, tenure, frequency, cancellation history, and chronological histories. Refund requests, delivery/payment operations, device/address links, evidence, verifier results, scenarios, costs, and abuse labels are simulated and named accordingly in metadata.
+Operational refund requests, payment/refund ledger state, evidence, device/address relationships, verifier results, scenarios, policy costs, and serial false-claim labels are simulated and identified in `artifacts/v2/data/metadata.json`.
 
-UCI cancellation rows remain transaction events and are never abuse labels.
+## Two lanes
+
+The 200-case deterministic lane covers over-balance amount, cumulative exhaustion, uncaptured payment, merchant/currency mismatch, missing payment, duplicate idempotency, concurrent balance conflict, gateway failure with reservation release, and webhook replay. These cases never enter ML metrics.
+
+The 12,000-case ML lane contains only technically valid ambiguous claims at decision time: payment exists, merchant and currency match, status is captured, amount is positive and within simulated point-in-time balance, and complete simulated prior-refund history is present.
 
 ## Partitions
 
-Four non-overlapping chronological periods contain 4,800 train, 800 calibration, 800 policy-selection, and 1,600 locked future-test requests. Cold-start is a separate challenge mapping and does not alter primary test membership.
+| Partition | Support | Use |
+|---|---:|---|
+| Train | 7,200 | Fit models |
+| Calibration | 1,200 | Select/refit calibrator only |
+| Policy selection | 1,200 | Freeze thresholds and operating policy |
+| Locked future test | 2,400 | Opened once after freeze |
 
-Point-in-time computation requires `event_time < decision_time`, matured outcomes, and compute-before-update ordering. Final truth remained physically sealed until a freeze manifest bound the model, calibration, likelihoods, policy, costs, features, source, and transformed data.
+The transformed-data fingerprint is `da91c45038f2088d5fd31a9b00b04dfb6f57862013f11d028bbf4f2601586db0`. The preregistration hash is `f58e5ee470832c8819aea6ceb81106794c7b0558b86029f2d7667ba59e347a8e`.
 
-## Difficult legitimate cases
+## Hard legitimate cases
 
-The generator includes shared households, loyal high-volume customers, product-defect bursts, carrier incidents, legitimate high-value damage, first-order returns, and missing or inconclusive evidence. Several held-out slices are small and must not be treated as conclusive subgroup evidence.
+V2 includes defect bursts, high-value loyal customers, first refunds, cold starts, unusual purchases, missing evidence, and verifier unavailability. These are simulated stress conditions. Several final slices have only 68-69 cases and are underpowered.
 
 ## Limitations
 
-The original retail history is UK-centric. Currency conversion and all refund-risk semantics are simulated. The dataset does not validate production fraud prevalence, merchant operations, Indian consumer behavior, or realized policy value.
-
-V1 contains original captured payment amounts but no point-in-time prior-refund ledger. Fifty-five final requests exceed original captured payment and are reported as a separate deterministic-integrity subgroup. Requests below original captured amount are not asserted to have verified refundable balance.
+The source is UK-centric and all refund-risk semantics are simulated. The benchmark does not establish merchant-specific prevalence, Indian consumer behavior, production fraud detection, fairness, executable monetary value, or realized policy outcomes.

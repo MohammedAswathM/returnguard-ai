@@ -1,0 +1,36 @@
+schema_version: "2.0"
+features:
+  - {name: account_tenure_days, type: float, group: claim_order_context, default: 0.0, cutoff_rule: "created_at < decision_time", maturity_rule: none}
+  - {name: requested_amount_paise, type: float, group: claim_order_context, default: 0.0, cutoff_rule: current_request, maturity_rule: none}
+  - {name: requested_quantity_ratio, type: float, group: claim_order_context, default: 0.0, cutoff_rule: current_request, maturity_rule: none}
+  - {name: hours_delivery_to_request, type: float, group: claim_order_context, default: 0.0, cutoff_rule: current_request, maturity_rule: none}
+  - {name: reason_code, type: category, group: claim_order_context, default: other, cutoff_rule: current_request, maturity_rule: none}
+  - {name: category, type: category, group: claim_order_context, default: other, cutoff_rule: current_order, maturity_rule: none}
+  - {name: prior_order_count, type: float, group: smoothed_customer_history, default: 0.0, cutoff_rule: "ordered_at < decision_time", maturity_rule: none}
+  - {name: smoothed_refund_rate_90d, type: float, group: smoothed_customer_history, default: 0.05, cutoff_rule: "requested_at < decision_time", maturity_rule: none}
+  - {name: prior_matured_adverse_rate, type: float, group: smoothed_customer_history, default: 0.05, cutoff_rule: "requested_at < decision_time", maturity_rule: "outcome_available_at < decision_time"}
+  - {name: decayed_refund_velocity_30d, type: float, group: time_decayed_refund_velocity, default: 0.0, cutoff_rule: "requested_at < decision_time", maturity_rule: none}
+  - {name: customer_peer_refund_deviation, type: float, group: customer_peer_deviation, default: 0.0, cutoff_rule: "requested_at < decision_time", maturity_rule: none}
+  - {name: category_matured_defect_rate, type: float, group: product_category_defect_context, default: 0.05, cutoff_rule: "requested_at < decision_time", maturity_rule: "outcome_available_at < decision_time"}
+  - {name: reason_history_inconsistency, type: float, group: claim_integrity_evidence, default: 0.0, cutoff_rule: "requested_at < decision_time", maturity_rule: none}
+  - {name: evidence_provided, type: float, group: claim_integrity_evidence, default: 0.0, cutoff_rule: current_request, maturity_rule: none}
+  - {name: returnless_requested, type: float, group: claim_integrity_evidence, default: 0.0, cutoff_rule: current_request, maturity_rule: none}
+  - {name: prior_connected_claim_count, type: float, group: supporting_entity_context, default: 0.0, cutoff_rule: "requested_at < decision_time", maturity_rule: none}
+  - {name: connected_matured_adverse_rate, type: float, group: supporting_entity_context, default: 0.05, cutoff_rule: "requested_at < decision_time", maturity_rule: "outcome_available_at < decision_time"}
+  - {name: missing_evidence_indicator, type: float, group: missingness_indicators, default: 1.0, cutoff_rule: current_request, maturity_rule: none}
+  - {name: cold_start_indicator, type: float, group: missingness_indicators, default: 1.0, cutoff_rule: "requested_at < decision_time", maturity_rule: none}
+forbidden_features:
+  - amount_paid_ratio
+  - requested_amount_above_balance
+  - refundable_balance_paise
+  - captured_amount_paise
+  - amount_refunded_paise
+  - active_reservation_amount_paise
+  - gateway_authorized_execution_amount_paise
+  - payment_integrity_reason_code
+  - simulation_scenario
+  - generator_seed
+  - is_refund_abuse_simulated
+  - outcome_available_at
+  - verification_result
+  - future_action

@@ -1,0 +1,57 @@
+{
+  "not_additional_real_world_evidence": true,
+  "results": [
+    {
+      "calibrated_brier_score": 0.08969057384766072,
+      "development_prevalence": 0.1,
+      "development_support": 2400,
+      "final_state": "SEALED_NOT_EVALUATED",
+      "generator_seed": 20260904,
+      "raw_average_precision": 0.1489907631381448,
+      "transformed_data_sha256": "0f4eee41115d67e0783d2ea198cac4c6bde0b248a3b6521d9f120078b7ac69fd"
+    },
+    {
+      "calibrated_brier_score": 0.08967631333172563,
+      "development_prevalence": 0.1,
+      "development_support": 2400,
+      "final_state": "SEALED_NOT_EVALUATED",
+      "generator_seed": 20260905,
+      "raw_average_precision": 0.1528933510197174,
+      "transformed_data_sha256": "7de09346ef2397bfec911fa7862733164dd19065f442b9e074f607a5b669845f"
+    },
+    {
+      "calibrated_brier_score": 0.08977631962528676,
+      "development_prevalence": 0.1,
+      "development_support": 2400,
+      "final_state": "SEALED_NOT_EVALUATED",
+      "generator_seed": 20260906,
+      "raw_average_precision": 0.136104444079991,
+      "transformed_data_sha256": "5c68eb8460c2f8e0a6a9a1722d9cd0fca4861653fa78a4dc7f9c77a4344e3ead"
+    },
+    {
+      "calibrated_brier_score": 0.0897603019497483,
+      "development_prevalence": 0.1,
+      "development_support": 2400,
+      "final_state": "SEALED_NOT_EVALUATED",
+      "generator_seed": 20260907,
+      "raw_average_precision": 0.14640147799597147,
+      "transformed_data_sha256": "0a9831ca82384a3e0f3c47199814bd7a0f1f65d303afdb7479975023db63f81b"
+    },
+    {
+      "calibrated_brier_score": 0.08968086122993874,
+      "development_prevalence": 0.1,
+      "development_support": 2400,
+      "final_state": "SEALED_NOT_EVALUATED",
+      "generator_seed": 20260908,
+      "raw_average_precision": 0.16315120805433536,
+      "transformed_data_sha256": "f2d252aad453d34c15473827f57a4d6fb97546437ed59feb0c3531219dc61825"
+    }
+  ],
+  "schema_version": "2.0",
+  "scope": "five full synthetic generator replays; development partitions only",
+  "summary": {
+    "mean_raw_average_precision": 0.149508248857632,
+    "standard_deviation_raw_average_precision": 0.008799671033220683,
+    "worst_seed_raw_average_precision": 0.136104444079991
+  }
+}

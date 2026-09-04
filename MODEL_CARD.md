@@ -1,35 +1,31 @@
 # Model Card
 
-## Intended use
+## V2 model
 
-LightGBM estimates the probability of a simulated serial false-claim label at refund-request time. It supports evidence selection and bounded policy actions; it does not establish guilt, autonomously reject a customer, or replace operator review.
+ReturnGuard v2 estimates a simulated serial false-claim probability only after deterministic payment-integrity checks pass. It does not establish guilt, reject customers autonomously, or replace operator judgment.
 
-## Training and calibration
+Thirty-two bounded LightGBM trials used three rolling-origin folds within train. Mean temporal AP was 0.1572 for rules, 0.1573 for Logistic Regression, 0.1610 for default LightGBM, and 0.1720 for the selected regularized LightGBM. Selection used the preregistered stability/capacity-penalized objective. No final labels participated.
 
-Only the chronological train period fits preprocessing and LightGBM. The calibration period alone compares sigmoid and isotonic calibration using a chronological half-fit/half-evaluate protocol. Isotonic was selected and refit on the complete calibration period. Policy-selection and final labels were excluded from all model and calibration choices.
+Sigmoid calibration beat isotonic on the calibration selection half by Brier (0.08465 versus 0.08509) and log loss (0.31039 versus 0.34492), then was refit on the full calibration period. Policy thresholds were selected on policy-selection only.
 
 ## Locked performance
 
-On 1,600 future cases at 9.3125% simulated prevalence: PR-AUC 0.7615, precision 77.31%, recall 61.74%, FPR 1.86%, Brier 0.0381, and counts 92 TP / 27 FP / 1,424 TN / 57 FN. Customer-cluster bootstrap PR-AUC 95% interval was 0.7005–0.8169.
+The 2,400-case future test has 10% simulated prevalence. Raw AP is 0.1400 (customer-cluster bootstrap 95% CI 0.1178-0.1691). At the frozen capacity threshold: 6 TP, 33 FP, 2,127 TN, 234 FN; precision 15.38%, recall 2.50%, FPR 1.53%. Calibrated Brier is 0.0897 and log loss is 0.3237.
 
-Raw LightGBM PR-AUC was 0.8132. Isotonic ties reduced final ranking while preserving the frozen probability mapping; no post-final tuning occurred.
+The original lock's precision/recall bootstrap intervals mixed raw-score and calibrated-probability scales. `results.v2.metric_integrity.v2.0.1.json` corrects those intervals without changing predictions or selection.
 
-## Post-lock subgroup audit
+## Shortcut controls
 
-The 55 requests exceeding original captured payment were all simulated positives, and `amount_paid_ratio > 1` identifies them exactly. Removing them without changing predictions reduces raw AP from 0.8132 to 0.5935 and frozen-threshold recall from 61.74% to 39.36%. The model directly uses requested-to-paid ratio, which contributed strongly positive SHAP values in this subgroup. This is a possible generator shortcut and a required v2 redesign item; v1 was not retrained or tuned.
+V2 forbids payment balances, captured amounts, requested-to-paid ratios, invalidity codes, future outcomes, post-verification actions, scenario names, and seeds. Maximum development single-feature AP was 0.1273, stump AP 0.1131, and permuted-label AP 0.1029 at 10% prevalence. The largest mean absolute SHAP share was 0.372; the top three totaled 0.652.
 
-## Metric glossary
+## Feature groups
 
-- **Initial legitimate challenge rate:** stage-A non-auto actions among all legitimate cases: 184 / 1,451 = 12.68%.
-- **Legitimate rescue rate:** initially challenged legitimate cases restored to auto-approval among all legitimate cases: 168 / 1,451 = 11.58%.
-- **Challenged-legitimate rescue rate:** those rescues among challenged legitimate cases: 168 / 184 = 91.30%.
-- **Terminal legitimate intervention rate:** challenged legitimate cases remaining non-auto at the final batch action: 16 / 1,451 = 1.10%. It is not a latency measurement.
-- **Classifier false positive:** a legitimate case above the frozen reporting threshold, independent of the policy action.
+The ordered schema covers claim/order context, smoothed customer history, time-decayed refund velocity, customer-peer deviation, product defect context, claim-integrity evidence, supporting entities, and missingness. All history is computed before the current event is added and uses only outcomes matured strictly before decision time.
 
-## Explanations
+## Interpretation
 
-TreeSHAP supplies no more than three risk-increasing and two mitigating factors. Each reason contains the actual feature, observed value, development reference, signed contribution, deterministic code, and neutral merchant-facing text. Reasons describe model contributions, not causes or guilt.
+V2 discrimination is modest. The score is suitable only as one input to bounded verification under this simulation. Technical verifier unavailability has likelihood ratio 1.0 and cannot increase the probability.
 
 ## Prohibited use
 
-Do not use the score as an autonomous denial, customer accusation, cross-merchant blacklist, credit decision, or production-performance claim.
+Do not use this model for autonomous denial, accusation, cross-merchant blacklisting, credit decisions, or claims of production performance or realized savings.

@@ -1,0 +1,104 @@
+{
+  "comparison": {
+    "adaptive_verification": {
+      "abuse_amount_intervention_recall": 0.20585295089773653,
+      "abuse_case_intervention_recall": 0.26666666666666666,
+      "challenged_legitimate_rescue_rate": 0.7024390243902439,
+      "initial_legitimate_challenge_rate": 0.18981481481481483,
+      "legitimate_rescue_rate": 0.13333333333333333,
+      "legitimate_return_first_burden": 10,
+      "manual_reviews": 58,
+      "manual_reviews_per_1000": 48.333333333333336,
+      "modeled_cost_paise": 316864162.8,
+      "support": 1200,
+      "terminal_legitimate_intervention_rate": 0.05648148148148148
+    },
+    "approve_all": {
+      "abuse_amount_intervention_recall": 0.0,
+      "abuse_case_intervention_recall": 0.0,
+      "challenged_legitimate_rescue_rate": 0.0,
+      "initial_legitimate_challenge_rate": 0.0,
+      "legitimate_rescue_rate": 0.0,
+      "legitimate_return_first_burden": 0,
+      "manual_reviews": 0,
+      "manual_reviews_per_1000": 0.0,
+      "modeled_cost_paise": 395316161.1,
+      "support": 1200,
+      "terminal_legitimate_intervention_rate": 0.0
+    },
+    "fixed_risk_bands": {
+      "abuse_amount_intervention_recall": 0.04815435156263335,
+      "abuse_case_intervention_recall": 0.05,
+      "challenged_legitimate_rescue_rate": 0.0,
+      "initial_legitimate_challenge_rate": 0.022222222222222223,
+      "legitimate_rescue_rate": 0.0,
+      "legitimate_return_first_burden": 0,
+      "manual_reviews": 30,
+      "manual_reviews_per_1000": 25.0,
+      "modeled_cost_paise": 376990967.70000005,
+      "support": 1200,
+      "terminal_legitimate_intervention_rate": 0.022222222222222223
+    },
+    "return_first_all": {
+      "abuse_amount_intervention_recall": 1.0,
+      "abuse_case_intervention_recall": 1.0,
+      "challenged_legitimate_rescue_rate": 0.0,
+      "initial_legitimate_challenge_rate": 1.0,
+      "legitimate_rescue_rate": 0.0,
+      "legitimate_return_first_burden": 1080,
+      "manual_reviews": 0,
+      "manual_reviews_per_1000": 0.0,
+      "modeled_cost_paise": 18660000.0,
+      "support": 1200,
+      "terminal_legitimate_intervention_rate": 1.0
+    }
+  },
+  "cost_disclosure": "Simulated policy cost under declared assumptions; not realized savings.",
+  "likelihoods": {
+    "laplace_alpha": 1.0,
+    "likelihood_ratios": {
+      "consistent": 0.2198693141300463,
+      "evidence_inconclusive": 1.1916208759993274,
+      "inconsistent": 17.70140311777322,
+      "verifier_timeout": 1.0,
+      "verifier_unavailable": 1.0
+    },
+    "raw_counts": {
+      "consistent": {
+        "abuse": 152,
+        "legitimate": 6242
+      },
+      "evidence_inconclusive": {
+        "abuse": 103,
+        "legitimate": 782
+      },
+      "inconsistent": {
+        "abuse": 585,
+        "legitimate": 296
+      }
+    },
+    "support": 8400,
+    "technical_results": {
+      "verifier_timeout": "fixed neutral; not estimated from customer outcomes",
+      "verifier_unavailable": "fixed neutral; not estimated from customer outcomes"
+    }
+  },
+  "manual_review_threshold": 0.11021991083440714,
+  "policy_version": "returnguard-v2-policy-1",
+  "schema_version": "2.0",
+  "selected_metrics": {
+    "abuse_amount_intervention_recall": 0.20585295089773653,
+    "abuse_case_intervention_recall": 0.26666666666666666,
+    "challenged_legitimate_rescue_rate": 0.7024390243902439,
+    "initial_legitimate_challenge_rate": 0.18981481481481483,
+    "legitimate_rescue_rate": 0.13333333333333333,
+    "legitimate_return_first_burden": 10,
+    "manual_reviews": 58,
+    "manual_reviews_per_1000": 48.333333333333336,
+    "modeled_cost_paise": 316864162.8,
+    "support": 1200,
+    "terminal_legitimate_intervention_rate": 0.05648148148148148
+  },
+  "selection_partition": "policy_selection",
+  "verify_threshold": 0.10351285082518503
+}

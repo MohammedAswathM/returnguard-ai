@@ -1,0 +1,171 @@
+{
+  "artifacts": {
+    "case_predictions_sha256": "0a915a94cefdd5db30031c538ffe052335e292d3c2b2efb1d39953d8bc752288",
+    "final_truth_sha256": "029c5f8aff0d098d436ca792d3e1c721a9681e234c85a6d8372debf8b5f6cf72",
+    "freeze_manifest_sha256": "4038c6d22fd5eb8dc7dffb982e5b6d12823fe96e3d6e499dedb8f1f54b95b30a",
+    "model_sha256": "0b419d1156afca9d23a2e63ca7fb68a6fcdcd91d7d48381b4a2a5c908bc2d9ec",
+    "policy_sha256": "94a22caaf28cc4dee608536b3796d85ec512082ca35f30c264b90d02e0c206f8"
+  },
+  "benchmark_version": "returnguard-v2.0",
+  "classifier": {
+    "average_precision": 0.14001460130997762,
+    "bootstrap_95_percent_ci": {
+      "average_precision": [
+        0.1177616081720332,
+        0.16910855348092194
+      ],
+      "precision": [
+        0.12300319488817892,
+        0.17909409474866522
+      ],
+      "recall": [
+        0.3153482570999564,
+        0.4430479981671344
+      ]
+    },
+    "calibrated_brier_score": 0.08974242573770942,
+    "calibrated_log_loss": 0.3236796995363152,
+    "f1": 0.043010752688172046,
+    "fn": 234,
+    "fp": 33,
+    "fpr": 0.015277777777777777,
+    "precision": 0.15384615384615385,
+    "prevalence": 0.1,
+    "raw_average_precision": 0.14001460130997762,
+    "recall": 0.025,
+    "support": 2400,
+    "threshold": 0.11021991083440714,
+    "tn": 2127,
+    "tp": 6
+  },
+  "cold_start_counterfactual": {
+    "average_precision": 0.13357049651712988,
+    "calibrated_brier_score": 0.08983442782580142,
+    "f1": 0.008298755186721992,
+    "fn": 239,
+    "fp": 0,
+    "fpr": 0.0,
+    "precision": 1.0,
+    "prevalence": 0.1,
+    "recall": 0.004166666666666667,
+    "support": 2400,
+    "threshold": 0.11021991083440714,
+    "tn": 2160,
+    "tp": 1
+  },
+  "hard_legitimate_slices": {
+    "cold_start_customer": {
+      "initial_challenge_rate": 0.15942028985507245,
+      "mean_calibrated_probability": 0.09968941160123541,
+      "support": 69,
+      "terminal_intervention_rate": 0.043478260869565216
+    },
+    "first_time_refund": {
+      "initial_challenge_rate": 0.2753623188405797,
+      "mean_calibrated_probability": 0.10080566656970812,
+      "support": 69,
+      "terminal_intervention_rate": 0.07246376811594203
+    },
+    "genuine_product_defect_burst": {
+      "initial_challenge_rate": 0.014705882352941176,
+      "mean_calibrated_probability": 0.0956763398602044,
+      "support": 68,
+      "terminal_intervention_rate": 0.014705882352941176
+    },
+    "high_value_loyal_customer": {
+      "initial_challenge_rate": 0.0,
+      "mean_calibrated_probability": 0.09788212484894605,
+      "support": 68,
+      "terminal_intervention_rate": 0.0
+    },
+    "missing_evidence": {
+      "initial_challenge_rate": 0.2028985507246377,
+      "mean_calibrated_probability": 0.10067684062913548,
+      "support": 69,
+      "terminal_intervention_rate": 0.2028985507246377
+    },
+    "routine_legitimate": {
+      "initial_challenge_rate": 0.17083333333333334,
+      "mean_calibrated_probability": 0.09985997374191029,
+      "support": 1680,
+      "terminal_intervention_rate": 0.03630952380952381
+    },
+    "unusual_legitimate_purchase": {
+      "initial_challenge_rate": 0.15942028985507245,
+      "mean_calibrated_probability": 0.09989781081252187,
+      "support": 69,
+      "terminal_intervention_rate": 0.057971014492753624
+    },
+    "verifier_unavailable": {
+      "initial_challenge_rate": 0.3235294117647059,
+      "mean_calibrated_probability": 0.10245603840413675,
+      "support": 68,
+      "terminal_intervention_rate": 0.3235294117647059
+    }
+  },
+  "integrity_lane": {
+    "coverage": "ten deterministic scenarios; executable invariants are covered by payment-integrity tests",
+    "included_in_ml_metrics": false,
+    "support": 200
+  },
+  "opened_at": "2026-09-03T15:04:46.950687Z",
+  "policy_comparison": {
+    "adaptive_verification": {
+      "abuse_amount_intervention_recall": 0.24910120649981848,
+      "abuse_case_intervention_recall": 0.25,
+      "challenged_legitimate_rescue_rate": 0.6986301369863014,
+      "initial_legitimate_challenge_rate": 0.16898148148148148,
+      "legitimate_rescue_rate": 0.11805555555555555,
+      "legitimate_return_first_burden": 16,
+      "manual_reviews": 110,
+      "manual_reviews_per_1000": 45.83333333333333,
+      "modeled_cost_paise": 593112411.6500001,
+      "support": 2400,
+      "terminal_legitimate_intervention_rate": 0.05092592592592592
+    },
+    "approve_all": {
+      "abuse_amount_intervention_recall": 0.0,
+      "abuse_case_intervention_recall": 0.0,
+      "challenged_legitimate_rescue_rate": 0.0,
+      "initial_legitimate_challenge_rate": 0.0,
+      "legitimate_rescue_rate": 0.0,
+      "legitimate_return_first_burden": 0,
+      "manual_reviews": 0,
+      "manual_reviews_per_1000": 0.0,
+      "modeled_cost_paise": 782807772.1500001,
+      "support": 2400,
+      "terminal_legitimate_intervention_rate": 0.0
+    },
+    "fixed_risk_bands": {
+      "abuse_amount_intervention_recall": 0.027128751534585795,
+      "abuse_case_intervention_recall": 0.025,
+      "challenged_legitimate_rescue_rate": 0.0,
+      "initial_legitimate_challenge_rate": 0.015277777777777777,
+      "legitimate_rescue_rate": 0.0,
+      "legitimate_return_first_burden": 0,
+      "manual_reviews": 39,
+      "manual_reviews_per_1000": 16.25,
+      "modeled_cost_paise": 762529674.6000001,
+      "support": 2400,
+      "terminal_legitimate_intervention_rate": 0.015277777777777777
+    },
+    "return_first_all": {
+      "abuse_amount_intervention_recall": 1.0,
+      "abuse_case_intervention_recall": 1.0,
+      "challenged_legitimate_rescue_rate": 0.0,
+      "initial_legitimate_challenge_rate": 1.0,
+      "legitimate_rescue_rate": 0.0,
+      "legitimate_return_first_burden": 2160,
+      "manual_reviews": 0,
+      "manual_reviews_per_1000": 0.0,
+      "modeled_cost_paise": 37320000.0,
+      "support": 2400,
+      "terminal_legitimate_intervention_rate": 1.0
+    }
+  },
+  "prevalence": 0.1,
+  "schema_version": "2.0",
+  "simulation_disclosure": "UCI transaction-derived foundation with simulated operational fields and abuse labels; not production performance or realized savings.",
+  "status": "LOCKED_FINAL_OPENED_ONCE",
+  "support": 2400
+}

@@ -1,0 +1,21 @@
+schema_version: "2.0"
+benchmark_version: "returnguard-v2.0"
+generator_version: "returnguard-v2-generator-1"
+source_archive: data/raw/online_retail_ii.zip
+source_sha256: 572e36277c2390fbfde10664750731e0a86f55e33470d91919085f0408e67bfb
+primary_seed: 20260903
+robustness_seeds: [20260904, 20260905, 20260906, 20260907, 20260908]
+n_orders: 40000
+n_ml_claims: 12000
+n_integrity_cases: 200
+abuse_prevalence: 0.10
+hard_legitimate_fraction: 0.20
+outcome_delay_days: 14
+split_counts:
+  train: 7200
+  calibration: 1200
+  policy_selection: 1200
+  final_test: 2400
+cold_start_fraction: 0.10
+output_dir: artifacts/v2/data
+lock_dir: artifacts/v2/locked_final

@@ -1,0 +1,126 @@
+{
+  "benchmark_version": "returnguard-v2.0",
+  "field_provenance": {
+    "deterministically_derived": [
+      "order_id",
+      "category",
+      "delivered_at",
+      "account_status",
+      "created_at"
+    ],
+    "simulated_labels_or_scenario_metadata": [
+      "is_refund_abuse_simulated",
+      "simulation_scenario"
+    ],
+    "simulated_operational": [
+      "refund_request_id",
+      "payment_id",
+      "merchant_id",
+      "decision_time",
+      "reason_code",
+      "claimed_refund_amount_paise",
+      "gateway_authorized_execution_amount_paise",
+      "requested_quantity",
+      "returnless_requested",
+      "evidence_provided",
+      "outcome_available_at",
+      "verification_result_simulated",
+      "captured_amount_paise",
+      "amount_refunded_paise",
+      "active_reservation_amount_paise",
+      "refundable_balance_paise",
+      "payment_status",
+      "payment_exists",
+      "merchant_matches",
+      "currency_matches",
+      "snapshot_as_of",
+      "source",
+      "shipping_address_id",
+      "device_id"
+    ],
+    "source_transaction_derived": [
+      "customer_id",
+      "ordered_at",
+      "gross_amount_paise",
+      "item_count",
+      "country"
+    ]
+  },
+  "final_lock": {
+    "opened_at": null,
+    "preregistration_sha256": "f58e5ee470832c8819aea6ceb81106794c7b0558b86029f2d7667ba59e347a8e",
+    "schema_version": "2.0",
+    "state": "SEALED",
+    "support": 2400,
+    "truth_sha256": "029c5f8aff0d098d436ca792d3e1c721a9681e234c85a6d8372debf8b5f6cf72"
+  },
+  "fingerprints": {
+    "cold_start_mapping": "13d643f7a19e606430eac96d13d41818e58a6d79fcb17f722b3f3ab11478e242",
+    "customers": "4e6dde4f3b8772adb86e85dcc55731d7cdb97b89da06cc90ebb9480279d9a271",
+    "integrity_cases": "1f87265326fca9a74e205d436b0452d2dba513666c2cfd90ad7e48739cf84a16",
+    "orders": "52ba8cc59f0a552361822167f4f2153e4e6d810ed8ef8db6a018d0efd04d015e",
+    "payment_snapshots": "d2643696af11fb7c6c8fd7f41c80942a84f250ac71fff822cab4745b2f31f57c",
+    "refund_ledger_entries": "daf8f157d49ea0e61f11348252d4c7f9191309cd7f3ea8519914cca93bfb328e",
+    "refund_requests": "4e372a3b93ec96402c85aa7f179fc92885538b6a959504d3b58bad28d62c490e"
+  },
+  "foundation": {
+    "sampled_customer_cancellation_events": 18261,
+    "sampled_source_invoices": 40000,
+    "simulated_fx_assumption_gbp_to_inr": 100.0,
+    "source_archive_sha256": "572e36277c2390fbfde10664750731e0a86f55e33470d91919085f0408e67bfb",
+    "source_exact_duplicates_removed": 34335,
+    "source_missing_customer_rows_mapped_to_invoice_guests": 235151,
+    "source_rows": 1067371,
+    "uci_cancellation_transaction_rows": 19104,
+    "uci_cancellations_used_as_labels": false
+  },
+  "generator_seed": 20260903,
+  "generator_version": "returnguard-v2-generator-1",
+  "lane_support": {
+    "deterministic_payment_integrity": 200,
+    "ml_eligible_ambiguous_claims": 12000
+  },
+  "ml_eligibility": {
+    "all_captured": true,
+    "all_currency_matches": true,
+    "all_merchant_matches": true,
+    "all_payment_exists": true,
+    "all_positive_claims": true,
+    "all_within_refundable_balance": true,
+    "complete_prior_refund_history": true
+  },
+  "preregistration_sha256": "f58e5ee470832c8819aea6ceb81106794c7b0558b86029f2d7667ba59e347a8e",
+  "schema_version": "2.0",
+  "source_archive_sha256": "572e36277c2390fbfde10664750731e0a86f55e33470d91919085f0408e67bfb",
+  "split_summary": [
+    {
+      "end_at": "2011-03-22T06:15:16.490289266Z",
+      "partition": "train",
+      "prevalence": 0.1,
+      "start_at": "2009-12-06T18:41:19.249557792Z",
+      "support": 7200
+    },
+    {
+      "end_at": "2011-06-12T15:07:16.631917778Z",
+      "partition": "calibration",
+      "prevalence": 0.1,
+      "start_at": "2011-03-22T07:02:07.538847836Z",
+      "support": 1200
+    },
+    {
+      "end_at": "2011-08-31T10:56:44.464565178Z",
+      "partition": "policy_selection",
+      "prevalence": 0.1,
+      "start_at": "2011-06-12T15:19:09.223281211Z",
+      "support": 1200
+    },
+    {
+      "end_at": "2012-01-05T00:45:56.632572744Z",
+      "partition": "final_test",
+      "prevalence": null,
+      "start_at": "2011-08-31T12:14:35.277718732Z",
+      "support": 2400
+    }
+  ],
+  "transformed_data_sha256": "da91c45038f2088d5fd31a9b00b04dfb6f57862013f11d028bbf4f2601586db0"
+}

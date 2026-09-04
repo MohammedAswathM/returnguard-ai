@@ -1,0 +1,38 @@
+{
+  "aggregate_hash": "3210f1306d84aaaac09217e32bca1afaf396edfc5e4f3ad10909c30934a598fb",
+  "artifact_hashes": {
+    "data_metadata": "b866b41e2c97887f0a438fd28e841c0270204d0067cc2ad69507944f19dfb284",
+    "development_features": "2f524ee5590415b36a01f47a976ddc93c6d44ff3d4a98406d7c9e0c6c6817b06",
+    "feature_config": "592f818a479687e92e653a332b28c454bebfd690d442d816e7806b9cba89976b",
+    "final_evaluator": "b265c0e67a53cdc6bf3a485a9f873bf6ca06b02b2d5fd5dffa848c5e32841cc4",
+    "final_script": "c4a09e5957c2809bdd401fc65cbeb04cf35f82371bdf68167f0c84a808c06e1e",
+    "final_truth": "029c5f8aff0d098d436ca792d3e1c721a9681e234c85a6d8372debf8b5f6cf72",
+    "generator_seed_robustness": "21191c1aecf64fc2dedc6232291c83000be78b5282138657005e683149d92d34",
+    "model": "0b419d1156afca9d23a2e63ca7fb68a6fcdcd91d7d48381b4a2a5c908bc2d9ec",
+    "model_config": "70f7467bcda8b2d2d19eddee43e166485d164de8852e0ebc9fbdfbfa9959acf2",
+    "model_selection": "73445de8ea102e160f9e6a7a3d8013155390cb132d9593f5afae0f0b0aaafec1",
+    "model_trials": "7c1d0d32f4c6fdde3f5e0674438ec00a681138dd0b4e9a859fddd1faad9860a2",
+    "policy": "94a22caaf28cc4dee608536b3796d85ec512082ca35f30c264b90d02e0c206f8",
+    "policy_config": "d38e64a335b15de1922908b75150309ad287f7d380109294686636f65387b17b",
+    "preregistration": "f58e5ee470832c8819aea6ceb81106794c7b0558b86029f2d7667ba59e347a8e",
+    "requirements_lock": "f376093af5646b9d5c50ecc094127e71027c97e99bb2c6782fb870f7fa779a5c",
+    "robustness": "02210b53c2234a6ec5af63f50269738c51906162d34939cf5de0b0d77afa62cf",
+    "shortcut_audit": "bf0b66c9ae0dd39096dab2cb88b8eeadecb8edaab78f114dfca36a26e57c5561"
+  },
+  "benchmark_version": "returnguard-v2.0",
+  "frozen_at": "2026-09-03T15:04:10.994561Z",
+  "genuine_razorpay_evidence_sha256": "90ed93e63005e307a3ff72599674fa84663ef8d8a632a10e96d6029376ae4858",
+  "operating_constraints": {
+    "initial_legitimate_challenge_rate_max": 0.2,
+    "manual_review_rate_max": 0.05,
+    "max_verifications_per_request": 1,
+    "no_autonomous_rejection": true
+  },
+  "schema_version": "2.0",
+  "source_commit": "d861fac17ea247882467fc7d7876c45c2a504661",
+  "status": "FROZEN_FOR_ONE_TIME_FINAL_EVALUATION",
+  "v1_provenance": {
+    "metric_correction_sha256": "2621ed5ac2266ccde8dc081e7f605d9e4712ad2e0dc5062fecbffb1bc817ba2f",
+    "results_lock_sha256": "1832c422d79bc965692f89fe910e9dae5b8eca3240116d3c3b9ac842cbaba986"
+  }
+}

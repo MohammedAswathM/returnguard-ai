@@ -1,0 +1,288 @@
+{
+  "feature_config_sha256": "592f818a479687e92e653a332b28c454bebfd690d442d816e7806b9cba89976b",
+  "forbidden_features": [
+    "amount_paid_ratio",
+    "requested_amount_above_balance",
+    "refundable_balance_paise",
+    "captured_amount_paise",
+    "amount_refunded_paise",
+    "active_reservation_amount_paise",
+    "gateway_authorized_execution_amount_paise",
+    "payment_integrity_reason_code",
+    "simulation_scenario",
+    "generator_seed",
+    "is_refund_abuse_simulated",
+    "outcome_available_at",
+    "verification_result",
+    "future_action"
+  ],
+  "ordered_features": [
+    {
+      "cutoff_rule": "created_at < decision_time",
+      "default": 0.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_ACCOUNT_TENURE_DAYS",
+        "template": "Model input account_tenure_days differed from its development reference."
+      },
+      "group": "claim_order_context",
+      "maturity_rule": "none",
+      "name": "account_tenure_days",
+      "semantic_description": "Customer account age at the claim decision."
+    },
+    {
+      "cutoff_rule": "current_request",
+      "default": 0.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_REQUESTED_AMOUNT_PAISE",
+        "template": "Model input requested_amount_paise differed from its development reference."
+      },
+      "group": "claim_order_context",
+      "maturity_rule": "none",
+      "name": "requested_amount_paise",
+      "semantic_description": "Current technically valid claimed refund amount."
+    },
+    {
+      "cutoff_rule": "current_request",
+      "default": 0.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_REQUESTED_QUANTITY_RATIO",
+        "template": "Model input requested_quantity_ratio differed from its development reference."
+      },
+      "group": "claim_order_context",
+      "maturity_rule": "none",
+      "name": "requested_quantity_ratio",
+      "semantic_description": "Claimed quantity divided by purchased quantity."
+    },
+    {
+      "cutoff_rule": "current_request",
+      "default": 0.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_HOURS_DELIVERY_TO_REQUEST",
+        "template": "Model input hours_delivery_to_request differed from its development reference."
+      },
+      "group": "claim_order_context",
+      "maturity_rule": "none",
+      "name": "hours_delivery_to_request",
+      "semantic_description": "Elapsed hours from delivery to claim submission."
+    },
+    {
+      "cutoff_rule": "current_request",
+      "default": "other",
+      "dtype": "category",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_REASON_CODE",
+        "template": "Model input reason_code differed from its development reference."
+      },
+      "group": "claim_order_context",
+      "maturity_rule": "none",
+      "name": "reason_code",
+      "semantic_description": "Structured merchant claim reason."
+    },
+    {
+      "cutoff_rule": "current_order",
+      "default": "other",
+      "dtype": "category",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_CATEGORY",
+        "template": "Model input category differed from its development reference."
+      },
+      "group": "claim_order_context",
+      "maturity_rule": "none",
+      "name": "category",
+      "semantic_description": "Source-derived product category group."
+    },
+    {
+      "cutoff_rule": "ordered_at < decision_time",
+      "default": 0.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_PRIOR_ORDER_COUNT",
+        "template": "Model input prior_order_count differed from its development reference."
+      },
+      "group": "smoothed_customer_history",
+      "maturity_rule": "none",
+      "name": "prior_order_count",
+      "semantic_description": "Orders placed strictly before the claim decision."
+    },
+    {
+      "cutoff_rule": "requested_at < decision_time",
+      "default": 0.05,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_SMOOTHED_REFUND_RATE_90D",
+        "template": "Model input smoothed_refund_rate_90d differed from its development reference."
+      },
+      "group": "smoothed_customer_history",
+      "maturity_rule": "none",
+      "name": "smoothed_refund_rate_90d",
+      "semantic_description": "Empirically smoothed prior 90-day claim rate."
+    },
+    {
+      "cutoff_rule": "requested_at < decision_time",
+      "default": 0.05,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_PRIOR_MATURED_ADVERSE_RATE",
+        "template": "Model input prior_matured_adverse_rate differed from its development reference."
+      },
+      "group": "smoothed_customer_history",
+      "maturity_rule": "outcome_available_at < decision_time",
+      "name": "prior_matured_adverse_rate",
+      "semantic_description": "Smoothed adverse rate among outcomes matured before decision."
+    },
+    {
+      "cutoff_rule": "requested_at < decision_time",
+      "default": 0.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_DECAYED_REFUND_VELOCITY_30D",
+        "template": "Model input decayed_refund_velocity_30d differed from its development reference."
+      },
+      "group": "time_decayed_refund_velocity",
+      "maturity_rule": "none",
+      "name": "decayed_refund_velocity_30d",
+      "semantic_description": "Exponentially decayed prior 30-day claim activity."
+    },
+    {
+      "cutoff_rule": "requested_at < decision_time",
+      "default": 0.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_CUSTOMER_PEER_REFUND_DEVIATION",
+        "template": "Model input customer_peer_refund_deviation differed from its development reference."
+      },
+      "group": "customer_peer_deviation",
+      "maturity_rule": "none",
+      "name": "customer_peer_refund_deviation",
+      "semantic_description": "Customer smoothed claim rate minus the prior portfolio rate."
+    },
+    {
+      "cutoff_rule": "requested_at < decision_time",
+      "default": 0.05,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_CATEGORY_MATURED_DEFECT_RATE",
+        "template": "Model input category_matured_defect_rate differed from its development reference."
+      },
+      "group": "product_category_defect_context",
+      "maturity_rule": "outcome_available_at < decision_time",
+      "name": "category_matured_defect_rate",
+      "semantic_description": "Smoothed matured legitimate-defect rate for the category."
+    },
+    {
+      "cutoff_rule": "requested_at < decision_time",
+      "default": 0.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_REASON_HISTORY_INCONSISTENCY",
+        "template": "Model input reason_history_inconsistency differed from its development reference."
+      },
+      "group": "claim_integrity_evidence",
+      "maturity_rule": "none",
+      "name": "reason_history_inconsistency",
+      "semantic_description": "Deviation of the current reason from prior customer reasons."
+    },
+    {
+      "cutoff_rule": "current_request",
+      "default": 0.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_EVIDENCE_PROVIDED",
+        "template": "Model input evidence_provided differed from its development reference."
+      },
+      "group": "claim_integrity_evidence",
+      "maturity_rule": "none",
+      "name": "evidence_provided",
+      "semantic_description": "Whether structured evidence is present for this claim."
+    },
+    {
+      "cutoff_rule": "current_request",
+      "default": 0.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_RETURNLESS_REQUESTED",
+        "template": "Model input returnless_requested differed from its development reference."
+      },
+      "group": "claim_integrity_evidence",
+      "maturity_rule": "none",
+      "name": "returnless_requested",
+      "semantic_description": "Whether the current request asks for returnless treatment."
+    },
+    {
+      "cutoff_rule": "requested_at < decision_time",
+      "default": 0.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_PRIOR_CONNECTED_CLAIM_COUNT",
+        "template": "Model input prior_connected_claim_count differed from its development reference."
+      },
+      "group": "supporting_entity_context",
+      "maturity_rule": "none",
+      "name": "prior_connected_claim_count",
+      "semantic_description": "Prior claims sharing the current address or device."
+    },
+    {
+      "cutoff_rule": "requested_at < decision_time",
+      "default": 0.05,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_CONNECTED_MATURED_ADVERSE_RATE",
+        "template": "Model input connected_matured_adverse_rate differed from its development reference."
+      },
+      "group": "supporting_entity_context",
+      "maturity_rule": "outcome_available_at < decision_time",
+      "name": "connected_matured_adverse_rate",
+      "semantic_description": "Smoothed matured adverse rate for supporting entities."
+    },
+    {
+      "cutoff_rule": "current_request",
+      "default": 1.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_MISSING_EVIDENCE_INDICATOR",
+        "template": "Model input missing_evidence_indicator differed from its development reference."
+      },
+      "group": "missingness_indicators",
+      "maturity_rule": "none",
+      "name": "missing_evidence_indicator",
+      "semantic_description": "Explicit missingness indicator for structured evidence."
+    },
+    {
+      "cutoff_rule": "requested_at < decision_time",
+      "default": 1.0,
+      "dtype": "float",
+      "explanation_mapping": {
+        "interpretation_boundary": "Model association only; not a causal or guilt claim.",
+        "reason_code": "V2_COLD_START_INDICATOR",
+        "template": "Model input cold_start_indicator differed from its development reference."
+      },
+      "group": "missingness_indicators",
+      "maturity_rule": "none",
+      "name": "cold_start_indicator",
+      "semantic_description": "Whether no prior claim is available for this customer."
+    }
+  ],
+  "schema_version": "2.0"
+}

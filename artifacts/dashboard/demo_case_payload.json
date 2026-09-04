@@ -1,0 +1,40 @@
+{
+  "currency": "INR",
+  "customer_id": "cus_36284ebc57b5cea7",
+  "features": {
+    "account_tenure_days": 259.6677035457523,
+    "amount_paid_ratio": 0.7604636958554066,
+    "category": "uci_product_group_85",
+    "evidence_provided": 1.0,
+    "first_order_indicator": 0.0,
+    "hours_delivery_to_request": 58.99155176472222,
+    "prior_cancellation_count": 1.0,
+    "prior_matured_adverse_outcome_count": 1.0,
+    "prior_order_count": 4.0,
+    "prior_refund_count_30d": 0.0,
+    "prior_refund_count_90d": 0.0,
+    "prior_returnless_count": 0.0,
+    "reason_code": "not_received",
+    "requested_amount_paise": 2440328.0,
+    "requested_quantity_ratio": 0.8170731707317073,
+    "returnless_requested": 1.0
+  },
+  "merchant_id": "demo-merchant",
+  "order_id": "demo-order-rr_0005675",
+  "payment_id": "demo-payment-rr_0005675",
+  "payment_snapshot": {
+    "amount_refunded_paise": 0,
+    "captured_amount_paise": 2440328,
+    "captured_at": null,
+    "currency": "INR",
+    "merchant_id": "demo-merchant",
+    "order_id": "demo-order-rr_0005675",
+    "payment_id": "demo-payment-rr_0005675",
+    "payment_status": "captured",
+    "razorpay_payment_id": null,
+    "refundable_balance_paise": 2440328,
+    "snapshot_as_of": "2026-09-03T14:42:59.915344+00:00",
+    "source": "LABELLED_DEMO_FIXTURE"
+  },
+  "requested_amount_paise": 2440328
+}

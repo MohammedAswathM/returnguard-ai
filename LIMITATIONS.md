@@ -1,16 +1,14 @@
-# Limitations and Responsible Use
+# Limitations
 
-- Abuse labels, evidence, refund operations, verifier outcomes, and economics are simulated.
-- UCI Online Retail II is UK-centric transaction history, not India-wide or merchant-specific validation.
-- The final test contains 149 simulated positive cases; several hard-legitimate slices are underpowered.
-- The 128-case cold-start challenge has only 17 simulated positives; every named hard-legitimate final slice has 29–32 cases and no positive labels.
-- Isotonic calibration introduced tied probabilities and reduced final PR-AUC versus raw model ranking.
-- V1 has no point-in-time prior-refund ledger, so refundable balance and incremental monetary value cannot be certified.
-- Fifty-five simulated abuse requests exceeded original captured payment, and the model directly used requested-to-paid ratio. The frozen full-test score therefore includes an easy deterministic subgroup.
-- Structured order integrity cannot determine physical product damage or customer intent.
-- Missing evidence is not evidence of abuse and must remain inconclusive.
-- Genuine Razorpay test execution has not been completed in this run.
-
-## Responsible use
-
-The system should delay adverse outcomes until a named operator reviews the facts, provide neutral reasons and reconsideration, minimize retained evidence, enforce access controls, and measure legitimate-customer impact prospectively. Production use requires merchant-specific validation, legal and fairness review, monitoring, incident response, retention limits, and an appeal workflow.
+- UCI Online Retail II provides UK-centric transaction distributions, not return-abuse labels or Indian merchant validation.
+- Abuse labels, payment/refund histories, evidence, verifier results, operational scenarios, and policy costs are simulated.
+- V2 final raw AP is 0.1400 at 10% prevalence. This modest ranking performance is not sufficient evidence for production deployment.
+- The frozen capacity threshold recalls 2.50% of abuse labels; broader adaptive intervention reaches 25.00% by using structured verification.
+- Several hard-legitimate final slices have only 68-69 cases and are underpowered.
+- Verifier unavailability is probability-neutral but routes challenged cases to review, producing a high terminal-intervention rate in that small slice.
+- Policy costs are assumption-dependent. Return-first-all is cheapest under the frozen simulation but creates unacceptable blanket customer burden; no realized or incremental monetary value is claimed.
+- The original v2 lock contained invalid precision/recall bootstrap intervals and overbroad policy cost attribution. The original remains preserved; `results.v2.metric_integrity.v2.0.1.json` is authoritative for those fields.
+- Historical v1 mixed 55 certainly invalid over-captured requests into ML evaluation. V2 corrects the benchmark design; v1 remains preserved with its own reporting correction.
+- The completed genuine Razorpay evidence covers one bounded Test Mode partial refund and exactly-once replay. It is not a production integration, load test, or live-money claim.
+- V2 is the primary offline benchmark, but the interactive API demo still uses the preserved v1 trusted bundle. A separate serving-parity migration is required before v2 can power API decisions.
+- Production deployment requires merchant-specific prospective validation, fairness analysis, calibrated monitoring, access and retention controls, incident response, reconciliation, and appeal operations.

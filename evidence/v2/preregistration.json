@@ -1,0 +1,156 @@
+{
+  "benchmark_version": "returnguard-v2.0",
+  "bootstrap_protocol": {
+    "cluster": "customer_id",
+    "confidence_level": 0.95,
+    "resamples": 1000,
+    "seed": 20260903
+  },
+  "calibration_selection_rule": "Compare sigmoid and isotonic on calibration only; select minimum Brier score with log loss tie-break and publish reliability support.",
+  "deterministic_integrity_scenarios": [
+    "requested_amount_above_refundable_balance",
+    "cumulative_partial_refund_exhaustion",
+    "payment_not_captured",
+    "merchant_mismatch",
+    "currency_mismatch",
+    "payment_not_found",
+    "duplicate_idempotency_key",
+    "concurrent_balance_conflict",
+    "gateway_failure_reservation_release",
+    "webhook_replay"
+  ],
+  "ensemble_selection_rule": "Do not select an ensemble unless mean rolling-origin AP improves by at least 0.01, no temporal fold regresses, and calibration or policy utility improves; otherwise prefer one LightGBM.",
+  "entity_isolation_rules": {
+    "cold_start": "Separate challenge mapping; challenge customer and entity identifiers cannot appear in train.",
+    "primary": "Chronological recurring-customer replay; every aggregate excludes the current event and future events.",
+    "source_rows": "UCI orders may be sampled once per primary benchmark; final truth is stored only in the sealed lock directory."
+  },
+  "feature_allowlist": [
+    "account_tenure_days",
+    "requested_amount_paise",
+    "requested_quantity_ratio",
+    "hours_delivery_to_request",
+    "reason_code",
+    "category",
+    "prior_order_count",
+    "smoothed_refund_rate_90d",
+    "prior_matured_adverse_rate",
+    "decayed_refund_velocity_30d",
+    "customer_peer_refund_deviation",
+    "category_matured_defect_rate",
+    "reason_history_inconsistency",
+    "evidence_provided",
+    "returnless_requested",
+    "prior_connected_claim_count",
+    "connected_matured_adverse_rate",
+    "missing_evidence_indicator",
+    "cold_start_indicator"
+  ],
+  "final_opening_rule": "Open v2 final truth exactly once only after shortcut, leakage, lane-separation, feature, model, calibrator, likelihood, policy, evaluation-code, dependency, and hash gates pass. Any failure retains v1 as primary.",
+  "forbidden_features": [
+    "amount_paid_ratio",
+    "requested_amount_above_balance",
+    "refundable_balance_paise",
+    "captured_amount_paise",
+    "amount_refunded_paise",
+    "active_reservation_amount_paise",
+    "gateway_authorized_execution_amount_paise",
+    "payment_integrity_reason_code",
+    "simulation_scenario",
+    "generator_seed",
+    "is_refund_abuse_simulated",
+    "outcome_available_at",
+    "verification_result",
+    "future_action",
+    "current_event_updated_aggregates"
+  ],
+  "generator": {
+    "primary_seed": 20260903,
+    "robustness_seeds": [20260904, 20260905, 20260906, 20260907, 20260908],
+    "version": "returnguard-v2-generator-1"
+  },
+  "label_generation_rules": "Sample simulated serial false-claim labels from a bounded noisy combination of historical velocity, peer deviation, repeated nonidentical patterns, claim timing, reason inconsistency, entity context, cross-category escalation, and evidence inconsistency. Payment invalidity never determines the ML label and no observable feature may perfectly expose it.",
+  "ml_eligible_scenario_mixture": {
+    "hard_legitimate_fraction": 0.20,
+    "nominal_simulated_abuse_prevalence": 0.10,
+    "scenarios": [
+      "routine_legitimate",
+      "genuine_product_defect_burst",
+      "high_value_loyal_customer",
+      "first_time_refund",
+      "cold_start_customer",
+      "unusual_legitimate_purchase",
+      "missing_evidence",
+      "verifier_unavailable",
+      "serial_false_claim",
+      "repeated_claim_pattern",
+      "peer_deviation",
+      "claim_timing",
+      "claim_reason_inconsistency",
+      "supporting_entity_pattern",
+      "cross_category_escalation",
+      "evidence_inconsistency"
+    ]
+  },
+  "model_candidates": [
+    "deterministic_rules_baseline",
+    "regularized_logistic_regression",
+    "default_regularized_lightgbm",
+    "tuned_lightgbm"
+  ],
+  "policy_objective": "Minimize declared simulated policy cost subject to at most 5% manual review, at most one verifier, at most 20% initial legitimate challenge on policy-selection data, and no autonomous adverse decision.",
+  "primary_metrics": [
+    "raw_average_precision",
+    "calibrated_brier_score",
+    "abuse_case_intervention_recall",
+    "terminal_legitimate_intervention_rate"
+  ],
+  "review_capacity_constraint": "manual review rate <= 0.05 on policy-selection data",
+  "secondary_metrics": [
+    "precision",
+    "recall",
+    "false_positive_rate",
+    "log_loss",
+    "abuse_amount_intervention_recall",
+    "initial_legitimate_challenge_rate",
+    "legitimate_rescue_rate",
+    "challenged_legitimate_rescue_rate",
+    "legitimate_return_first_burden",
+    "manual_reviews_per_1000"
+  ],
+  "source_uci_archive_sha256": "572e36277c2390fbfde10664750731e0a86f55e33470d91919085f0408e67bfb",
+  "split_boundaries": {
+    "calibration": {"rank_end_exclusive": 8400, "rank_start_inclusive": 7200, "support": 1200},
+    "final_test": {"rank_end_exclusive": 12000, "rank_start_inclusive": 9600, "support": 2400},
+    "ordering": ["decision_time", "refund_request_id"],
+    "policy_selection": {"rank_end_exclusive": 9600, "rank_start_inclusive": 8400, "support": 1200},
+    "train": {"rank_end_exclusive": 7200, "rank_start_inclusive": 0, "support": 7200}
+  },
+  "stop_conditions": [
+    "Any ML case violates point-in-time payment validity or lacks complete prior-refund history.",
+    "Any forbidden field enters the model matrix.",
+    "Any single feature deterministically exposes the simulated label.",
+    "Permuted-label AP materially exceeds prevalence beyond sampling tolerance.",
+    "Chronological, maturity, compute-before-update, entity-isolation, or lane-contamination tests fail.",
+    "Calibration produces non-finite probabilities.",
+    "Policy exceeds manual-review capacity.",
+    "Any v1 or genuine Razorpay evidence hash changes."
+  ],
+  "temporal_model_selection": {
+    "bounded_lightgbm_trials": 32,
+    "folds": 3,
+    "objective": "mean temporal average precision - 0.10 * AP standard deviation - review-capacity violation penalty",
+    "search_parameters": [
+      "learning_rate",
+      "num_leaves",
+      "max_depth",
+      "min_child_samples",
+      "n_estimators_with_early_stopping",
+      "subsample",
+      "colsample_bytree",
+      "reg_alpha",
+      "reg_lambda",
+      "min_split_gain"
+    ]
+  }
+}

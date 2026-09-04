@@ -5,21 +5,23 @@ import os
 import sqlite3
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import httpx
-import pandas as pd
 import streamlit as st
 
-from returnguard.features.engine import build_point_in_time_features
-from returnguard.features.registry import load_feature_registry
+if TYPE_CHECKING:
+    import pandas as pd
 
-RESULTS_PATH = Path(os.getenv("RETURNGUARD_RESULTS", "results.lock.json"))
+RESULTS_PATH = Path(os.getenv(
+    "RETURNGUARD_RESULTS", "artifacts/v2/final_results/results.lock.json"
+))
 CORRECTION_PATH = Path(os.getenv(
-    "RETURNGUARD_METRIC_CORRECTION", "results.metric_integrity.v1.1.json"
+    "RETURNGUARD_METRIC_CORRECTION", "results.v2.metric_integrity.v2.0.1.json"
 ))
 DATABASE_PATH = Path(os.getenv("RETURNGUARD_DB", "artifacts/returnguard.db"))
 API_URL = os.getenv("RETURNGUARD_API_URL", "http://127.0.0.1:8000")
+DEMO_PAYLOAD_PATH = Path("artifacts/dashboard/demo_case_payload.json")
 
 
 def load_results() -> dict[str, Any]:
@@ -35,6 +37,8 @@ def load_correction() -> dict[str, Any]:
 
 
 def query(sql: str, parameters: tuple[Any, ...] = ()) -> pd.DataFrame:
+    import pandas as pd
+
     if not DATABASE_PATH.is_file():
         return pd.DataFrame()
     with sqlite3.connect(DATABASE_PATH) as connection:
@@ -49,6 +53,19 @@ def api_post(path: str, payload: dict[str, Any] | None = None) -> dict[str, Any]
 
 @st.cache_data
 def demo_case_payload() -> dict[str, Any]:
+    if DEMO_PAYLOAD_PATH.is_file():
+        return cast(
+            dict[str, Any], json.loads(DEMO_PAYLOAD_PATH.read_text(encoding="utf-8"))
+        )
+    return build_demo_case_payload()
+
+
+def build_demo_case_payload() -> dict[str, Any]:
+    import pandas as pd
+
+    from returnguard.features.engine import build_point_in_time_features
+    from returnguard.features.registry import load_feature_registry
+
     registry = load_feature_registry(Path("configs/features.yaml"))
     features = build_point_in_time_features(Path("artifacts/data_uci"), registry).set_index(
         "refund_request_id"
@@ -91,33 +108,35 @@ def portfolio(results: dict[str, Any], correction: dict[str, Any]) -> None:
     if not results:
         st.warning("Locked evaluation artifact is unavailable.")
         return
-    metrics = results["metrics"]["lightgbm_calibrated"]
+    metrics = results["classifier"]
     if not correction:
         st.error("The authoritative metric-integrity correction is unavailable.")
         return
-    metrics_corrected = correction["correction"]["authoritative_public_metrics"]
+    adaptive = correction["corrections"]["policy_cost"]["comparison"]["adaptive_verification"]
     columns = st.columns(4)
     columns[0].metric("Requests", f"{results['support']:,}")
     columns[1].metric("Simulated abuse prevalence", f"{results['prevalence']:.2%}")
-    columns[2].metric("Reviews / 1,000", f"{metrics_corrected['manual_reviews_per_1000']['value']:.3f}")
-    columns[3].metric("Legitimate rescues", f"{metrics_corrected['legitimate_rescue_rate']['numerator']:,}")
+    columns[2].metric("Reviews / 1,000", f"{adaptive['manual_reviews_per_1000']:.2f}")
+    legitimate_support = results["support"] - metrics["tp"] - metrics["fn"]
+    rescue_count = round(adaptive["legitimate_rescue_rate"] * legitimate_support)
+    columns[3].metric("Legitimate rescues", f"{rescue_count:,}")
     columns = st.columns(4)
-    columns[0].metric("PR-AUC", f"{metrics['average_precision']:.3f}")
-    all_cases = correction["frozen_prediction_subgroup_audit"]["all_1600_cases"]
+    columns[0].metric("Raw PR-AUC", f"{metrics['raw_average_precision']:.3f}")
     columns[1].metric(
-        "Simulated abuse-amount intervention", f"{all_cases['simulated_abuse_amount_intervention_rate']:.1%}"
+        "Simulated abuse-amount intervention",
+        f"{adaptive['abuse_amount_intervention_recall']:.1%}",
     )
     columns[2].metric(
         "Initial legitimate challenge",
-        f"{metrics_corrected['initial_legitimate_challenge_rate']['value']:.1%}",
+        f"{adaptive['initial_legitimate_challenge_rate']:.1%}",
     )
     columns[3].metric(
         "Challenged legitimate rescued",
-        f"{metrics_corrected['challenged_legitimate_rescue_rate']['value']:.1%}",
+        f"{adaptive['challenged_legitimate_rescue_rate']:.1%}",
     )
     st.caption(
-        "The previous v1 monetary estimate is withdrawn: point-in-time refundable balance "
-        "cannot be reconstructed. Submitted amounts and intervention rates are simulated."
+        "V2 evaluates technically valid ambiguous claims separately from deterministic payment "
+        "integrity. Labels, verification outcomes, and policy costs are simulated."
     )
 
 
@@ -161,11 +180,13 @@ def case_detail() -> None:
 
 
 def evidence(results: dict[str, Any], correction: dict[str, Any]) -> None:
+    import pandas as pd
+
     st.header("Held-out evidence")
     if not results:
         st.warning("Locked evaluation artifact is unavailable.")
         return
-    metric = results["metrics"]["lightgbm_calibrated"]
+    metric = results["classifier"]
     matrix = pd.DataFrame(
         [[metric["tn"], metric["fp"]], [metric["fn"], metric["tp"]]],
         index=["Actual legitimate", "Actual simulated abuse"],
@@ -173,41 +194,31 @@ def evidence(results: dict[str, Any], correction: dict[str, Any]) -> None:
     )
     st.subheader("Confusion counts")
     st.dataframe(matrix)
-    bins = pd.DataFrame(metric["reliability_bins"])
+    report = json.loads(Path("evidence/v2/final_report.json").read_text(encoding="utf-8"))
+    bins = pd.DataFrame(report["classifier"]["reliability_bins"])
     st.subheader("Reliability with bin support")
     st.line_chart(bins.set_index("mean_probability")["observed_prevalence"])
     st.dataframe(bins[["bin", "support", "mean_probability", "observed_prevalence"]], hide_index=True)
-    st.subheader("Confidence interval")
-    st.json(results["confidence_intervals"]["calibrated_average_precision"])
+    st.subheader("Corrected confidence intervals")
+    st.json(correction["corrections"]["bootstrap_intervals"]["values"])
     st.warning(
         "Transaction distributions are derived from UCI Online Retail II. Abuse labels and "
         "operational verification fields are simulated; these are not production-performance claims."
     )
     if correction:
-        st.subheader("Post-lock payment-amount subgroup audit")
-        subgroup = correction["frozen_prediction_subgroup_audit"]
+        st.subheader("Frozen policy comparison")
         rows = []
-        for label, key in (
-            ("All final cases", "all_1600_cases"),
-            (
-                "Requests not exceeding original captured payment",
-                "requests_not_exceeding_original_captured_payment",
-            ),
-        ):
-            value = subgroup[key]
+        for name, value in correction["corrections"]["policy_cost"]["comparison"].items():
             rows.append({
-                "population": label, "support": value["support"],
-                "prevalence": value["prevalence"],
-                "raw_average_precision": value["raw_score_average_precision"],
-                "precision": value["precision"], "recall": value["recall"],
-                "false_positive_rate": value["false_positive_rate"],
-                "manual_reviews": value["manual_review_count"],
+                "policy": name,
+                "modeled_cost_inr": value["modeled_cost"]["total_modeled_cost_paise"] / 100,
+                "terminal_legitimate_intervention": value["terminal_legitimate_intervention_rate"],
+                "legitimate_return_first": value["legitimate_return_first_burden"],
+                "reviews_per_1000": value["manual_reviews_per_1000"],
+                "abuse_case_intervention": value["abuse_case_intervention_recall"],
             })
         st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
-        st.caption(
-            "Frozen predictions only. The 1,545-case group is not asserted to be gateway "
-            "eligible, executable, or refundable-balance verified."
-        )
+        st.caption("Modeled simulation cost under frozen assumptions; not realized savings.")
 
 
 def demo() -> None:

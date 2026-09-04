@@ -130,20 +130,83 @@ slice_hash = slice_results.pop("slice_results_sha256")
 if object_sha256(slice_results) != slice_hash:
     raise ValueError("slice result content hash mismatch")
 
+v2_paths = {
+    "v2_preregistration_sha256": Path("evidence/v2/preregistration.json"),
+    "v2_model_sha256": Path("artifacts/v2/training/model.joblib"),
+    "v2_policy_sha256": Path("artifacts/v2/policy/policy.json"),
+    "v2_freeze_sha256": Path("artifacts/v2/freeze_manifest.json"),
+    "v2_results_lock_sha256": Path("artifacts/v2/final_results/results.lock.json"),
+    "v2_metric_integrity_correction_sha256": Path("results.v2.metric_integrity.v2.0.1.json"),
+    "v2_final_report_sha256": Path("evidence/v2/final_report.json"),
+    "v2_feature_dictionary_sha256": Path("evidence/v2/feature_dictionary.json"),
+    "v2_generator_seed_robustness_sha256": Path(
+        "artifacts/v2/development/generator_seed_robustness.json"
+    ),
+}
+for manifest_key, path in v2_paths.items():
+    if submission.get(manifest_key) != file_sha256(path):
+        raise ValueError(f"submission manifest hash mismatch: {manifest_key}")
+v2_metadata = json.loads(Path("artifacts/v2/data/metadata.json").read_text(encoding="utf-8"))
+if submission.get("v2_transformed_data_sha256") != v2_metadata["transformed_data_sha256"]:
+    raise ValueError("submission manifest v2 transformed-data hash mismatch")
+v2_result_path = v2_paths["v2_results_lock_sha256"]
+v2_result = json.loads(v2_result_path.read_text(encoding="utf-8"))
+v2_cases = pd.read_parquet("artifacts/v2/final_results/case_predictions.parquet")
+v2_labels = v2_cases["is_refund_abuse_simulated"].astype(bool)
+v2_predicted = v2_cases["calibrated_probability"].ge(v2_result["classifier"]["threshold"])
+v2_counts = {
+    "tp": int((v2_labels & v2_predicted).sum()),
+    "fp": int((~v2_labels & v2_predicted).sum()),
+    "tn": int((~v2_labels & ~v2_predicted).sum()),
+    "fn": int((v2_labels & ~v2_predicted).sum()),
+}
+if any(v2_result["classifier"][name] != value for name, value in v2_counts.items()):
+    raise ValueError("v2 confusion counts do not match case predictions")
+if len(v2_cases) != v2_result["support"] or len(v2_cases) != 2400:
+    raise ValueError("v2 support does not match case predictions")
+v2_correction = json.loads(
+    v2_paths["v2_metric_integrity_correction_sha256"].read_text(encoding="utf-8")
+)
+if v2_correction["original_result_lock"]["sha256"] != file_sha256(v2_result_path):
+    raise ValueError("v2 correction does not bind the original result lock")
+if v2_correction["case_level_source"]["sha256"] != file_sha256(
+    Path(v2_correction["case_level_source"]["path"])
+):
+    raise ValueError("v2 correction case source hash mismatch")
+v2_adaptive = v2_correction["corrections"]["policy_cost"]["comparison"][
+    "adaptive_verification"
+]
+if v2_adaptive["manual_reviews"] != int(v2_cases["final_action"].eq("MANUAL_REVIEW").sum()):
+    raise ValueError("v2 adaptive manual-review count mismatch")
+legitimate_v2 = ~v2_labels
+challenged_v2 = legitimate_v2 & v2_cases["stage_a_action"].ne("AUTO_APPROVE")
+rescued_v2 = challenged_v2 & v2_cases["final_action"].eq("AUTO_APPROVE")
+terminal_v2 = legitimate_v2 & v2_cases["final_action"].ne("AUTO_APPROVE")
+for name, numerator, denominator in (
+    ("initial_legitimate_challenge_rate", challenged_v2.sum(), legitimate_v2.sum()),
+    ("legitimate_rescue_rate", rescued_v2.sum(), legitimate_v2.sum()),
+    ("challenged_legitimate_rescue_rate", rescued_v2.sum(), challenged_v2.sum()),
+    ("terminal_legitimate_intervention_rate", terminal_v2.sum(), legitimate_v2.sum()),
+):
+    close(float(v2_adaptive[name]), float(numerator / denominator))
+v2_report = json.loads(v2_paths["v2_final_report_sha256"].read_text(encoding="utf-8"))
+if file_sha256(Path(v2_report["transition_table"]["path"])) != v2_report["transition_table"]["sha256"]:
+    raise ValueError("v2 transition-table hash mismatch")
+
 readme = Path("README.md").read_text(encoding="utf-8")
 required_claims = (
-    "1,600", "9.3125%", "0.7615", "77.31%", "61.74%", "1.86%",
-    "92 TP", "27 FP", "1,424 TN", "57 FN", "simulated abuse labels",
-    "not production performance", "MOCK_RAZORPAY_TEST_ADAPTER", "12.68%", "91.30%",
-    "Terminal legitimate intervention rate", "withdrawn", "0.5935",
+    "2,400", "10.00%", "0.1400", "15.38%", "2.50%", "1.53%",
+    "6 TP", "33 FP", "2,127 TN", "234 FN", "simulated abuse labels",
+    "not production-performance evidence", "MOCK_RAZORPAY_TEST_ADAPTER", "12.68%", "91.30%",
+    "terminal legitimate intervention rate", "withdrawn", "0.1495", "0.1361",
 )
 missing_claims = [claim for claim in required_claims if claim not in readme]
 if missing_claims:
     raise ValueError(f"README is missing locked claims/disclosures: {missing_claims}")
 dashboard = Path("src/returnguard/dashboard/app.py").read_text(encoding="utf-8")
-if "results.lock.json" not in dashboard or "load_results()" not in dashboard:
+if "artifacts/v2/final_results/results.lock.json" not in dashboard or "load_results()" not in dashboard:
     raise ValueError("dashboard is not bound to the locked result artifact")
-if "results.metric_integrity.v1.1.json" not in dashboard or "load_correction()" not in dashboard:
+if "results.v2.metric_integrity.v2.0.1.json" not in dashboard or "load_correction()" not in dashboard:
     raise ValueError("dashboard is not bound to the authoritative correction artifact")
 
 for file in candidate_files():
@@ -174,7 +237,7 @@ if not args.repository_only:
         raise ValueError("submission bundle manifest hash mismatch")
 
 print(json.dumps({
-    "status": "PASS", "support": results["support"],
+    "status": "PASS", "support": v2_result["support"], "benchmark": "returnguard-v2.0",
     "results_sha256": declared_hash, "bundle": bundle_status,
     "secret_scan_files": len(candidate_files()),
 }, sort_keys=True))

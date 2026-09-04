@@ -1,0 +1,302 @@
+{
+  "authoritative_correction": {
+    "path": "results.v2.metric_integrity.v2.0.1.json",
+    "sha256": "9da2670fd0851215d883f05ff4238f025c027ebb7bc67a9b24f175820210233a"
+  },
+  "benchmark_version": "returnguard-v2.0",
+  "case_export": {
+    "path": "artifacts/v2/final_results/case_predictions.parquet",
+    "sha256": "0a915a94cefdd5db30031c538ffe052335e292d3c2b2efb1d39953d8bc752288"
+  },
+  "classifier": {
+    "bootstrap_95_percent_ci": {
+      "average_precision": [
+        0.1177616081720332,
+        0.16910855348092194
+      ],
+      "precision": [
+        0.05551801801801802,
+        0.2631965944272445
+      ],
+      "recall": [
+        0.008195884911341586,
+        0.04525401069518716
+      ]
+    },
+    "calibrated_brier_score": 0.08974242573770942,
+    "calibrated_log_loss": 0.3236796995363152,
+    "calibration_intercept": 15.369989583737201,
+    "calibration_slope": 8.012701750929514,
+    "fn": 234,
+    "fp": 33,
+    "fpr": 0.015277777777777777,
+    "precision": 0.15384615384615385,
+    "raw_average_precision": 0.14001460130997762,
+    "recall": 0.025,
+    "reliability_bins": [
+      {
+        "bin": 0,
+        "lower": 0.0,
+        "mean_probability": 0.09773336521958263,
+        "observed_prevalence": 0.07776427703523693,
+        "support": 1646,
+        "upper": 0.1
+      },
+      {
+        "bin": 1,
+        "lower": 0.1,
+        "mean_probability": 0.10479274052672219,
+        "observed_prevalence": 0.14854111405835543,
+        "support": 754,
+        "upper": 0.2
+      },
+      {
+        "bin": 2,
+        "lower": 0.2,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.30000000000000004
+      },
+      {
+        "bin": 3,
+        "lower": 0.30000000000000004,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.4
+      },
+      {
+        "bin": 4,
+        "lower": 0.4,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.5
+      },
+      {
+        "bin": 5,
+        "lower": 0.5,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.6000000000000001
+      },
+      {
+        "bin": 6,
+        "lower": 0.6000000000000001,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.7000000000000001
+      },
+      {
+        "bin": 7,
+        "lower": 0.7000000000000001,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.8
+      },
+      {
+        "bin": 8,
+        "lower": 0.8,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 0.9
+      },
+      {
+        "bin": 9,
+        "lower": 0.9,
+        "mean_probability": null,
+        "observed_prevalence": null,
+        "support": 0,
+        "upper": 1.0
+      }
+    ],
+    "tn": 2127,
+    "tp": 6
+  },
+  "cold_start_counterfactual": {
+    "average_precision": 0.13357049651712988,
+    "calibrated_brier_score": 0.08983442782580142,
+    "f1": 0.008298755186721992,
+    "fn": 239,
+    "fp": 0,
+    "fpr": 0.0,
+    "precision": 1.0,
+    "prevalence": 0.1,
+    "recall": 0.004166666666666667,
+    "support": 2400,
+    "threshold": 0.11021991083440714,
+    "tn": 2160,
+    "tp": 1
+  },
+  "development_generator_seed_robustness": {
+    "mean_raw_average_precision": 0.149508248857632,
+    "standard_deviation_raw_average_precision": 0.008799671033220683,
+    "worst_seed_raw_average_precision": 0.136104444079991
+  },
+  "disclosure": "Official UCI transaction-derived foundation with simulated abuse labels, operational fields, verification results, and policy costs; not production performance.",
+  "hard_legitimate_slices": {
+    "cold_start_customer": {
+      "initial_challenge_rate": 0.15942028985507245,
+      "mean_calibrated_probability": 0.09968941160123541,
+      "support": 69,
+      "terminal_intervention_rate": 0.043478260869565216
+    },
+    "first_time_refund": {
+      "initial_challenge_rate": 0.2753623188405797,
+      "mean_calibrated_probability": 0.10080566656970812,
+      "support": 69,
+      "terminal_intervention_rate": 0.07246376811594203
+    },
+    "genuine_product_defect_burst": {
+      "initial_challenge_rate": 0.014705882352941176,
+      "mean_calibrated_probability": 0.0956763398602044,
+      "support": 68,
+      "terminal_intervention_rate": 0.014705882352941176
+    },
+    "high_value_loyal_customer": {
+      "initial_challenge_rate": 0.0,
+      "mean_calibrated_probability": 0.09788212484894605,
+      "support": 68,
+      "terminal_intervention_rate": 0.0
+    },
+    "missing_evidence": {
+      "initial_challenge_rate": 0.2028985507246377,
+      "mean_calibrated_probability": 0.10067684062913548,
+      "support": 69,
+      "terminal_intervention_rate": 0.2028985507246377
+    },
+    "routine_legitimate": {
+      "initial_challenge_rate": 0.17083333333333334,
+      "mean_calibrated_probability": 0.09985997374191029,
+      "support": 1680,
+      "terminal_intervention_rate": 0.03630952380952381
+    },
+    "unusual_legitimate_purchase": {
+      "initial_challenge_rate": 0.15942028985507245,
+      "mean_calibrated_probability": 0.09989781081252187,
+      "support": 69,
+      "terminal_intervention_rate": 0.057971014492753624
+    },
+    "verifier_unavailable": {
+      "initial_challenge_rate": 0.3235294117647059,
+      "mean_calibrated_probability": 0.10245603840413675,
+      "support": 68,
+      "terminal_intervention_rate": 0.3235294117647059
+    }
+  },
+  "policy_comparison": {
+    "adaptive_verification": {
+      "abuse_amount_intervention_recall": 0.24910120649981848,
+      "abuse_case_intervention_recall": 0.25,
+      "challenged_legitimate_rescue_rate": 0.6986301369863014,
+      "initial_legitimate_challenge_rate": 0.16898148148148148,
+      "legitimate_rescue_rate": 0.11805555555555555,
+      "legitimate_return_first_burden": 16,
+      "manual_reviews": 110,
+      "manual_reviews_per_1000": 45.83333333333333,
+      "modeled_cost": {
+        "approved_abuse_loss_paise": 587809411.6500001,
+        "legitimate_review_delay_cost_paise": 235000.0,
+        "legitimate_review_friction_paise": 1128000.0,
+        "legitimate_verification_friction_paise": 1494000.0,
+        "manual_review_operating_cost_paise": 660000.0,
+        "return_processing_cost_paise": 540000.0,
+        "returned_abuse_unsalvaged_value_paise": 63040515.45000001,
+        "total_modeled_cost_paise": 655906927.1000001,
+        "verification_operating_cost_paise": 1000000.0
+      },
+      "support": 2400,
+      "terminal_legitimate_intervention_rate": 0.05092592592592592
+    },
+    "approve_all": {
+      "abuse_amount_intervention_recall": 0.0,
+      "abuse_case_intervention_recall": 0.0,
+      "challenged_legitimate_rescue_rate": 0.0,
+      "initial_legitimate_challenge_rate": 0.0,
+      "legitimate_rescue_rate": 0.0,
+      "legitimate_return_first_burden": 0,
+      "manual_reviews": 0,
+      "manual_reviews_per_1000": 0.0,
+      "modeled_cost": {
+        "approved_abuse_loss_paise": 782807772.1500001,
+        "legitimate_review_delay_cost_paise": 0.0,
+        "legitimate_review_friction_paise": 0.0,
+        "legitimate_verification_friction_paise": 0.0,
+        "manual_review_operating_cost_paise": 0.0,
+        "return_processing_cost_paise": 0.0,
+        "returned_abuse_unsalvaged_value_paise": 0.0,
+        "total_modeled_cost_paise": 782807772.1500001,
+        "verification_operating_cost_paise": 0.0
+      },
+      "support": 2400,
+      "terminal_legitimate_intervention_rate": 0.0
+    },
+    "fixed_risk_bands": {
+      "abuse_amount_intervention_recall": 0.027128751534585795,
+      "abuse_case_intervention_recall": 0.025,
+      "challenged_legitimate_rescue_rate": 0.0,
+      "initial_legitimate_challenge_rate": 0.015277777777777777,
+      "legitimate_rescue_rate": 0.0,
+      "legitimate_return_first_burden": 0,
+      "manual_reviews": 39,
+      "manual_reviews_per_1000": 16.25,
+      "modeled_cost": {
+        "approved_abuse_loss_paise": 761571174.6000001,
+        "legitimate_review_delay_cost_paise": 82500.0,
+        "legitimate_review_friction_paise": 396000.0,
+        "legitimate_verification_friction_paise": 0.0,
+        "manual_review_operating_cost_paise": 234000.0,
+        "return_processing_cost_paise": 0.0,
+        "returned_abuse_unsalvaged_value_paise": 0.0,
+        "total_modeled_cost_paise": 762283674.6000001,
+        "verification_operating_cost_paise": 0.0
+      },
+      "support": 2400,
+      "terminal_legitimate_intervention_rate": 0.015277777777777777
+    },
+    "return_first_all": {
+      "abuse_amount_intervention_recall": 1.0,
+      "abuse_case_intervention_recall": 1.0,
+      "challenged_legitimate_rescue_rate": 0.0,
+      "initial_legitimate_challenge_rate": 1.0,
+      "legitimate_rescue_rate": 0.0,
+      "legitimate_return_first_burden": 2160,
+      "manual_reviews": 0,
+      "manual_reviews_per_1000": 0.0,
+      "modeled_cost": {
+        "approved_abuse_loss_paise": 0.0,
+        "legitimate_review_delay_cost_paise": 0.0,
+        "legitimate_review_friction_paise": 0.0,
+        "legitimate_verification_friction_paise": 0.0,
+        "manual_review_operating_cost_paise": 0.0,
+        "return_processing_cost_paise": 21600000.0,
+        "returned_abuse_unsalvaged_value_paise": 318921684.95000005,
+        "total_modeled_cost_paise": 340521684.95000005,
+        "verification_operating_cost_paise": 0.0
+      },
+      "support": 2400,
+      "terminal_legitimate_intervention_rate": 1.0
+    }
+  },
+  "prevalence": 0.1,
+  "schema_version": "2.0.1",
+  "shortcut_audit": {
+    "max_decision_stump_average_precision": 0.11307692307692307,
+    "max_single_feature_average_precision": 0.12726273566715754,
+    "permuted_label_average_precision_mean": 0.1029451058350005
+  },
+  "source_result_lock": {
+    "path": "artifacts/v2/final_results/results.lock.json",
+    "sha256": "35de620f0b3f7822e3e03a62c6242c69fd7a049f6baf797360005bc37048e883"
+  },
+  "support": 2400,
+  "transition_table": {
+    "path": "evidence/v2/policy_transitions.csv",
+    "sha256": "77bfcc716bb404c61d41dda4734c26a1fc641478cfaa6ee9502f2551dd9d95b1"
+  }
+}

@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: setup download-uci validate-uci data data-uci data-robustness train-baselines train-baselines-uci train-primary select-policy robustness bundle metric-integrity publish-evidence test lint typecheck verify verify-phase-1-5 verify-phase-2 verify-phase-3 verify-phase-4 preflight preflight-repository api dashboard clean-artifacts
+.PHONY: setup download-uci validate-uci data data-uci data-robustness train-baselines train-baselines-uci train-primary select-policy robustness bundle metric-integrity publish-evidence v2-data v2-development v2-train v2-policy v2-robustness verify-v2-locked verify-v2-repository test lint typecheck verify verify-phase-1-5 verify-phase-2 verify-phase-3 verify-phase-4 preflight preflight-repository api dashboard clean-artifacts
 
 setup:
 	$(PYTHON) -m pip install -e ".[dev]"
@@ -46,6 +46,26 @@ metric-integrity:
 
 publish-evidence:
 	$(PYTHON) scripts/publish_evidence.py
+
+v2-data: validate-uci
+	$(PYTHON) scripts/generate_v2.py
+
+v2-development:
+	$(PYTHON) scripts/prepare_v2_development.py
+
+v2-train:
+	$(PYTHON) scripts/train_v2.py
+
+v2-policy:
+	$(PYTHON) scripts/select_v2_policy.py
+
+v2-robustness:
+	$(PYTHON) scripts/evaluate_v2_robustness.py
+	$(PYTHON) scripts/evaluate_v2_generator_seeds.py
+
+verify-v2-locked: test lint typecheck preflight
+
+verify-v2-repository: test lint typecheck preflight-repository
 
 test:
 	$(PYTHON) -m pytest -q

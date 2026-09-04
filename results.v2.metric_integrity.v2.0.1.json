@@ -1,0 +1,145 @@
+{
+  "authoritative_for_public_reporting": true,
+  "benchmark_version": "returnguard-v2.0",
+  "case_level_source": {
+    "path": "artifacts/v2/final_results/case_predictions.parquet",
+    "sha256": "0a915a94cefdd5db30031c538ffe052335e292d3c2b2efb1d39953d8bc752288"
+  },
+  "correction_type": "post-lock reporting-integrity correction",
+  "corrections": {
+    "bootstrap_intervals": {
+      "corrected_definition": "Customer-cluster bootstrap with 1,000 resamples; calibrated probabilities and the frozen calibrated threshold are used for precision and recall.",
+      "original_error": "Original precision and recall bootstrap intervals compared raw scores to a threshold defined on calibrated probabilities.",
+      "values": {
+        "average_precision": [
+          0.1177616081720332,
+          0.16910855348092194
+        ],
+        "precision": [
+          0.05551801801801802,
+          0.2631965944272445
+        ],
+        "recall": [
+          0.008195884911341586,
+          0.04525401069518716
+        ]
+      }
+    },
+    "policy_cost": {
+      "comparison": {
+        "adaptive_verification": {
+          "abuse_amount_intervention_recall": 0.24910120649981848,
+          "abuse_case_intervention_recall": 0.25,
+          "challenged_legitimate_rescue_rate": 0.6986301369863014,
+          "initial_legitimate_challenge_rate": 0.16898148148148148,
+          "legitimate_rescue_rate": 0.11805555555555555,
+          "legitimate_return_first_burden": 16,
+          "manual_reviews": 110,
+          "manual_reviews_per_1000": 45.83333333333333,
+          "modeled_cost": {
+            "approved_abuse_loss_paise": 587809411.6500001,
+            "legitimate_review_delay_cost_paise": 235000.0,
+            "legitimate_review_friction_paise": 1128000.0,
+            "legitimate_verification_friction_paise": 1494000.0,
+            "manual_review_operating_cost_paise": 660000.0,
+            "return_processing_cost_paise": 540000.0,
+            "returned_abuse_unsalvaged_value_paise": 63040515.45000001,
+            "total_modeled_cost_paise": 655906927.1000001,
+            "verification_operating_cost_paise": 1000000.0
+          },
+          "support": 2400,
+          "terminal_legitimate_intervention_rate": 0.05092592592592592
+        },
+        "approve_all": {
+          "abuse_amount_intervention_recall": 0.0,
+          "abuse_case_intervention_recall": 0.0,
+          "challenged_legitimate_rescue_rate": 0.0,
+          "initial_legitimate_challenge_rate": 0.0,
+          "legitimate_rescue_rate": 0.0,
+          "legitimate_return_first_burden": 0,
+          "manual_reviews": 0,
+          "manual_reviews_per_1000": 0.0,
+          "modeled_cost": {
+            "approved_abuse_loss_paise": 782807772.1500001,
+            "legitimate_review_delay_cost_paise": 0.0,
+            "legitimate_review_friction_paise": 0.0,
+            "legitimate_verification_friction_paise": 0.0,
+            "manual_review_operating_cost_paise": 0.0,
+            "return_processing_cost_paise": 0.0,
+            "returned_abuse_unsalvaged_value_paise": 0.0,
+            "total_modeled_cost_paise": 782807772.1500001,
+            "verification_operating_cost_paise": 0.0
+          },
+          "support": 2400,
+          "terminal_legitimate_intervention_rate": 0.0
+        },
+        "fixed_risk_bands": {
+          "abuse_amount_intervention_recall": 0.027128751534585795,
+          "abuse_case_intervention_recall": 0.025,
+          "challenged_legitimate_rescue_rate": 0.0,
+          "initial_legitimate_challenge_rate": 0.015277777777777777,
+          "legitimate_rescue_rate": 0.0,
+          "legitimate_return_first_burden": 0,
+          "manual_reviews": 39,
+          "manual_reviews_per_1000": 16.25,
+          "modeled_cost": {
+            "approved_abuse_loss_paise": 761571174.6000001,
+            "legitimate_review_delay_cost_paise": 82500.0,
+            "legitimate_review_friction_paise": 396000.0,
+            "legitimate_verification_friction_paise": 0.0,
+            "manual_review_operating_cost_paise": 234000.0,
+            "return_processing_cost_paise": 0.0,
+            "returned_abuse_unsalvaged_value_paise": 0.0,
+            "total_modeled_cost_paise": 762283674.6000001,
+            "verification_operating_cost_paise": 0.0
+          },
+          "support": 2400,
+          "terminal_legitimate_intervention_rate": 0.015277777777777777
+        },
+        "return_first_all": {
+          "abuse_amount_intervention_recall": 1.0,
+          "abuse_case_intervention_recall": 1.0,
+          "challenged_legitimate_rescue_rate": 0.0,
+          "initial_legitimate_challenge_rate": 1.0,
+          "legitimate_rescue_rate": 0.0,
+          "legitimate_return_first_burden": 2160,
+          "manual_reviews": 0,
+          "manual_reviews_per_1000": 0.0,
+          "modeled_cost": {
+            "approved_abuse_loss_paise": 0.0,
+            "legitimate_review_delay_cost_paise": 0.0,
+            "legitimate_review_friction_paise": 0.0,
+            "legitimate_verification_friction_paise": 0.0,
+            "manual_review_operating_cost_paise": 0.0,
+            "return_processing_cost_paise": 21600000.0,
+            "returned_abuse_unsalvaged_value_paise": 318921684.95000005,
+            "total_modeled_cost_paise": 340521684.95000005,
+            "verification_operating_cost_paise": 0.0
+          },
+          "support": 2400,
+          "terminal_legitimate_intervention_rate": 1.0
+        }
+      },
+      "corrected_definition": "Action-specific simulated costs under the already frozen assumptions; no realized savings or production economics claim.",
+      "original_error": "Original comparison charged verification cost to every non-approve strategy and did not debit unsalvaged value for abusive return-first cases."
+    }
+  },
+  "created_at": "2026-09-03T15:07:59.194951Z",
+  "original_result_lock": {
+    "path": "artifacts/v2/final_results/results.lock.json",
+    "sha256": "35de620f0b3f7822e3e03a62c6242c69fd7a049f6baf797360005bc37048e883"
+  },
+  "schema_version": "2.0.1",
+  "tuning_or_selection_performed": false,
+  "unchanged": {
+    "calibrator": true,
+    "cost_assumptions": true,
+    "features": true,
+    "labels": true,
+    "likelihood_ratios": true,
+    "model": true,
+    "policy_actions": true,
+    "predictions": true,
+    "thresholds": true
+  }
+}
