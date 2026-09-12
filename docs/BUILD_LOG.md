@@ -17,7 +17,7 @@
 
 ### Gate evidence
 
-- Environment: local temporary virtualenv, Python 3.12.3; package declares Python 3.11/3.12.
+- Environment: local temporary virtualenv, Python 3.12.3; package supports Python 3.12+.
 - `python -m pip install -e ".[dev]"`: passed inside the isolated virtualenv.
 - `pytest -q`: 21 passed.
 - `ruff check src scripts tests`: passed.

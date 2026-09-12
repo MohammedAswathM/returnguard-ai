@@ -2,7 +2,7 @@
 
 ## Fast path
 
-1. Create a Python 3.11+ virtual environment and run `python -m pip install -e ".[dev]"`.
+1. Create a Python 3.12+ virtual environment and run `python -m pip install -e ".[dev]"`.
 2. Run `pytest -q`, `make lint`, `make typecheck`, and `make preflight`.
 3. Run `python scripts/run_api.py` and `streamlit run scripts/run_dashboard.py`.
 4. Open **Golden workflows** for the two-action legitimate rescue, inconsistent evidence, and safe-failure paths.

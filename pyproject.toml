@@ -7,7 +7,12 @@ name = "returnguard-ai"
 version = "0.1.0"
 description = "Evidence-adaptive refund verification benchmark"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: OS Independent",
+]
 dependencies = [
   "fastapi>=0.115,<0.116",
   "numpy>=1.26,<2.3",
@@ -46,13 +51,13 @@ addopts = "--strict-markers"
 
 [tool.ruff]
 line-length = 120
-target-version = "py311"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.12"
 strict = true
 packages = ["returnguard"]
 ignore_missing_imports = true

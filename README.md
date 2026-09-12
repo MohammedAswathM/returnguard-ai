@@ -85,7 +85,7 @@ The reproducible test adapter remains explicitly labelled `MOCK_RAZORPAY_TEST_AD
 
 ## Run locally
 
-Use Python 3.11 or newer in a virtual environment:
+Use Python 3.12 or newer in a virtual environment:
 
 ```bash
 python3 -m venv .venv

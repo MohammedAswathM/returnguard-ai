@@ -18,9 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The supported release environment is Python 3.12. The package still
-        # declares >=3.11; a dedicated 3.11 compatibility investigation is
-        # tracked separately from this release gate.
+        # The supported release environment is Python 3.12.
         python-version: ["3.12"]
     steps:
       - uses: actions/checkout@v5
