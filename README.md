@@ -1,6 +1,8 @@
 # ReturnGuard AI
 
-ReturnGuard separates deterministic payment validity from probabilistic return-abuse risk, then uses one structured evidence check to rescue legitimate customers before a bounded refund action.
+**ReturnGuard AI validates refund integrity, estimates behavioral claim risk, and adaptively verifies uncertain requests before money moves.**
+
+It is a defense-only reference implementation for explainable, human-gated refund-risk decisions with idempotent Razorpay Test Mode execution.
 
 The submission has two deliberately separate frozen surfaces. **V2 is the primary clean offline ML benchmark**; the interactive API and golden workflows use the previously validated **v1 operational demonstration bundle**. The completed genuine Razorpay Test Mode refund validates the human-gated, webhook-confirmed execution layer, not v2 online deployment.
 
@@ -26,6 +28,15 @@ refund request
 ```
 
 Within the v2 offline benchmark, training, replay, and evaluation use the same ordered point-in-time feature engine. Histories exclude the current request, admit only matured outcomes, apply neutral cold-start priors, and exclude payment-invalid reason codes and balance-ratio shortcuts. Migrating that feature contract into the operational API is intentionally outside this frozen submission.
+
+## Core capabilities
+
+- Deterministic payment ownership, capture, currency, amount, balance, and idempotency checks before ML.
+- Calibrated behavioral-risk scoring over technically valid ambiguous claims.
+- One reason-compatible verifier followed by an explicit Bayesian likelihood-ratio update.
+- Capacity- and cost-bounded policy decisions with named human authorization for adverse outcomes.
+- Deterministic reason codes, immutable stage-A and posterior decisions, and an append-only audit trail.
+- Transactional balance reservation, signed webhook reconciliation, and duplicate-effect prevention.
 
 ## Locked v2 evidence
 
@@ -108,6 +119,17 @@ make preflight-repository
 
 A clean generation run starts with the official [UCI Online Retail II](https://archive.ics.uci.edu/dataset/502/online+retail+ii) archive (CC BY 4.0), SHA-256 `572e36277c2390fbfde10664750731e0a86f55e33470d91919085f0408e67bfb`. V2 contains 7,200 train, 1,200 calibration, 1,200 policy-selection, and 2,400 locked future cases. UCI provides transaction distributions; refund operations, evidence, scenarios, verifier outcomes, policy costs, and simulated abuse labels are benchmark constructs.
 
+## Repository structure
+
+```text
+src/returnguard/   application, risk, policy, verification, and data modules
+tests/             unit, integration, causal-feature, and locked-evidence tests
+configs/           reproducible data, feature, model, and policy contracts
+scripts/           generation, training, verification, and runtime entry points
+artifacts/v2/      frozen compact benchmark evidence required by verification
+evidence/          sanitized result and Razorpay Test Mode evidence
+```
+
 ## Metric glossary
 
 - **Initial legitimate challenge rate:** legitimate claims whose stage-A action is not immediate auto-approval, divided by all legitimate claims.
@@ -132,3 +154,11 @@ V1 remains byte-identical and auditable. Its corrected definitions are 184/1,451
 - Production use requires merchant-specific prospective validation, fairness review, monitoring, access controls, retention controls, incident response, and appeal operations.
 
 See [EVALUATOR.md](EVALUATOR.md), [DATA_CARD.md](DATA_CARD.md), [MODEL_CARD.md](MODEL_CARD.md), [POLICY_CARD.md](POLICY_CARD.md), and [LIMITATIONS.md](LIMITATIONS.md).
+
+## Roadmap
+
+The next production step is a merchant-specific prospective study and a train/serve parity migration for the v2 feature contract, followed by fairness, monitoring, access-control, retention, and incident-response review.
+
+## Author
+
+Built by [Mohammed Aswath](https://github.com/MohammedAswathM) as a portfolio reference for evidence-adaptive refund-risk engineering.

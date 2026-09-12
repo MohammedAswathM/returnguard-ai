@@ -28,6 +28,15 @@ The ordered schema covers claim/order context, smoothed customer history, time-d
 
 V2 discrimination is modest. The score is suitable only as one input to bounded verification under this simulation. Technical verifier unavailability has likelihood ratio 1.0 and cannot increase the probability.
 
+## Alternative-model evaluation
+
+A development-only comparison evaluated Logistic Regression, Extra Trees,
+HistGradientBoosting, and enhanced LightGBM features on the same rolling-origin
+periods. None established a meaningful improvement over the frozen v2
+development baseline: the best enhanced candidate had overlapping paired
+uncertainty and weaker macro temporal AP. V2 therefore remains the selected
+clean offline benchmark; no experimental model was bundled or served.
+
 ## Prohibited use
 
 Do not use this model for autonomous denial, accusation, cross-merchant blacklisting, credit decisions, or claims of production performance or realized savings.

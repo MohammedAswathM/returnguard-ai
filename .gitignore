@@ -1,15 +1,69 @@
+# Secrets and local environment
 .env
+.env.*
+!.env.example
 .venv/
+venv/
+venv-*/
+
+# Python, test, and build output
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+build/
+dist/
 *.egg-info/
+
+# Local state and source data
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.log
+data/raw/
+
+# Generated artifacts are private by default. These narrow exceptions are the
+# small frozen benchmark/runtime evidence required by tests and the dashboard.
 artifacts/*
 !artifacts/v2/
 !artifacts/v2/**
 !artifacts/dashboard/
 artifacts/dashboard/*
 !artifacts/dashboard/demo_case_payload.json
-data/raw/
+artifacts/colab_handoff_*/
+artifacts/returnguard_colab_handoff_*.zip
+artifacts/ml_v3_experiment/
+
+# Local research notebooks and handoff tooling
+notebooks/
+*.ipynb
+scripts/colab_handoff/
+scripts/build_colab_handoff_v2.py
+scripts/build_colab_handoff_v3.py
+scripts/run_ml_v3_experiment.py
+ML_V3_REPORT.md
+ML_V3_MODEL_CARD.md
+docs/DATA_CARD.md
+
+# Owner-only planning and recording material. Exact owner filenames remain in
+# `.git/info/exclude`; these generic patterns protect common local variants.
+*BRAIN*.md
+*_PROMPT.md
+START_*.md
+*_GATES.md
+*_HANDOFF.md
+DEMO_SCRIPT.md
+
+# IDE, OS, and tunnel state
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+ngrok.yml
+ngrok*.log
+cloudflared*.log
