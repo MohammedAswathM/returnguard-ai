@@ -1,4 +1,5 @@
 PYTHON ?= python3
+MYPY_CACHE_DIR ?= .mypy_cache
 
 .PHONY: setup download-uci validate-uci data data-uci data-robustness train-baselines train-baselines-uci train-primary select-policy robustness bundle metric-integrity publish-evidence v2-data v2-development v2-train v2-policy v2-robustness verify-v2-locked verify-v2-repository test lint typecheck verify verify-phase-1-5 verify-phase-2 verify-phase-3 verify-phase-4 preflight preflight-repository api dashboard clean-artifacts
 
@@ -74,7 +75,7 @@ lint:
 	$(PYTHON) -m ruff check src scripts tests
 
 typecheck:
-	$(PYTHON) -m mypy src/returnguard
+	$(PYTHON) -m mypy --cache-dir $(MYPY_CACHE_DIR) src/returnguard
 
 verify: data train-baselines test lint typecheck
 
